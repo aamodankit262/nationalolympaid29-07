@@ -396,9 +396,9 @@ const ResourcePersonDashboard = () => {
                                 >
                                   {stat.link}
                                 </a> */}
-                                
+
                                 <Button
-                                variant='outline'
+                                  variant='outline'
                                   onClick={() => {
                                     navigator.clipboard.writeText(stat.link);
                                     toast({
@@ -468,51 +468,57 @@ const ResourcePersonDashboard = () => {
                   <div className="space-y-4">
                     {dashboardData?.data?.students.length > 0 ? (
                       dashboardData?.data?.students?.slice(0, 3).map((referral: any, index: any) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
-                              {referral?.name.charAt(0)}
+                        <>
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
+                                {referral?.name.charAt(0)}
+                              </div>
+                              <div>
+                                <p className="font-medium">{referral?.name}</p>
+                                <p className="text-sm text-gray-500">{referral?.mobile}</p>
+                                <p className="text-xs text-gray-400">
+                                  Registered: {referral?.created_at}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-medium">{referral?.name}</p>
-                              <p className="text-sm text-gray-500">{referral?.mobile}</p>
-                              <p className="text-xs text-gray-400">
-                                Registered: {referral?.created_at}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <Badge
-                              variant={
-                                referral.is_paid === true
-                                  ? "default" : "secondary"
+                            <div className="text-right">
+                              <Badge
+                                variant={
+                                  referral.is_paid === true
+                                    ? "default" : "secondary"
 
-                              }
-                            >
-                              {referral.is_paid === true ? "Paid" : "Unpaid"}
-                              {/* {referral.status} */}
-                            </Badge>
+                                }
+                              >
+                                {referral.is_paid === true ? "Paid" : "Unpaid"}
+                                {/* {referral.status} */}
+                              </Badge>
 
-                            {/* <p className="text-sm font-medium text-green-600 mt-1">
+                              {/* <p className="text-sm font-medium text-green-600 mt-1">
                               {referral.earnings}
                             </p> */}
+                            </div>
+
                           </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500 text-sm">No Referrals found.</p>
-                    )}
-                  </div>
-                  <div className='flex justify-center items-center mt-5'>
+                           <div className='flex justify-center items-center mt-5'>
                     <Button
                       onClick={() => setActiveTab('referrals')}
                     >
                       View All
                     </Button>
                   </div>
+                        </>
+
+
+                      ))
+                    ) : (
+                      <p className="text-gray-500 text-sm">No Referrals found.</p>
+                    )}
+                  </div>
+
 
                 </CardContent>
               </Card>

@@ -15,7 +15,7 @@ const RoleSelection = () => {
     } else if (selectedRole === 'institute') {
     navigate('/register', { state: { role: selectedRole } });
     } else if (selectedRole === 'resource') {
-      navigate('/register', { state: { role: selectedRole } });
+      navigate('/resource-register', { state: { role: selectedRole } });
     }
   };
 

@@ -1,6 +1,7 @@
 import ExamInstruction from "@/pages/Dashboard/examInstructions";
 import Exam from "@/pages/Dashboard/ExamLive";
 import ExamThankYou from "@/pages/ExamThankYou";
+import ResourceRegister from "@/pages/ResourceRegister";
 import { lazy } from "react";
 import { ComponentType } from "react";
 
@@ -64,6 +65,12 @@ export const publicRoutes: RouteConfig[] = [
   { 
     path: `/register`, 
     element: Register, 
+    isProtected: false, 
+    isRestricted: true 
+  },
+  { 
+    path: `/resource-register`, 
+    element: ResourceRegister, 
     isProtected: false, 
     isRestricted: true 
   },
