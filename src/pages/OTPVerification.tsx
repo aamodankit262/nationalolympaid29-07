@@ -7,7 +7,6 @@ import { loginApi, verifyOtpApi } from "@/store/auth/authServices";
 import { useAuthStore } from "@/store/auth/authStore";
 import LoaderWithBackground from "@/components/LoaderWithBackground";
 import { useToast } from "@/hooks/use-toast";
-// import { getProfileApi } from "./Profile";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState("");
@@ -18,11 +17,9 @@ const OTPVerification = () => {
   const location = useLocation();
   const mobile = location.state?.mobile || ""; // Get mobile from state or params
   const { id } = useParams();
-  // const mobile = id;
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
-    // setLoading(true);
     try {
       const res = await verifyOtpApi({ mobile: mobile, otp: otp });
       const { status, message, user, token } = res;
@@ -30,23 +27,11 @@ const OTPVerification = () => {
         setLogin(true);
         setToken(token);
         setUserDetails(user);
-        // Fetch latest profile after OTP verification
-        // try {
-        //   const profileRes = await getProfileApi(token, logout);
-        //   if (profileRes?.status && profileRes.user) {
-        //     setUserDetails(profileRes.user);
-        //   } else {
-        //     setUserDetails(user); // fallback to user from OTP response
-        //   }
-        // } catch (e) {
-        //   setUserDetails(user); // fallback in case of error
-        // }
         if (user.type === "institute") {
           navigate("/school-dashboard");
         } else if (user.type === "resource") {
           navigate("/resource-person-dashboard");
         } else {
-          // navigate('/dashboard');
           navigate("/plans");
         }
       } else {
@@ -61,22 +46,6 @@ const OTPVerification = () => {
       setLoading(false);
     }
   };
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log('OTP verification:', otp);
-
-  //   // For demo purposes, we'll simulate different user types
-  //   // In real app, this would be determined by the backend response
-  //   const userType = localStorage.getItem('userType') || 'student';
-
-  //   if (userType === 'school' || userType === 'institute') {
-  //     navigate('/school-dashboard');
-  //   } else if (userType === 'resource') {
-  //     navigate('/resource-person-dashboard');
-  //   } else {
-  //     navigate('/dashboard');
-  //   }
-  // };
   const handleResendOtp = async () => {
     setLoading(true);
     try {
@@ -106,7 +75,6 @@ const OTPVerification = () => {
   return (
     <>
     {loading && <LoaderWithBackground visible={loading} />}
-      {/* <LoaderWithBackground visible={loading} /> */}
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex items-center justify-center pt-44 pb-8 px-8">
@@ -158,12 +126,6 @@ const OTPVerification = () => {
               </form>
 
               <div className="mt-6 text-center">
-                {/* <p className="text-gray-600">
-                Didn't receive the OTP?{' '}
-                <Link to="/login" className="text-safe-blue hover:underline font-semibold">
-                  Resend OTP.
-                </Link>
-              </p> */}
                 <p className="text-gray-600">
                   Didn't receive the OTP?{" "}
                   <button

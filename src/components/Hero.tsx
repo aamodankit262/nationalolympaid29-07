@@ -5,32 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const navigate = useNavigate()
-  // const scrollToSection = (sectionId: string) => {
-  //   const element = document.getElementById(sectionId);
-  //   if (element) {
-  //     element.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // };
-
   return (
     <section id="home" className="pt-20 sm:pt-32 pb-16 sm:pb-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden relative min-h-screen">
-      {/* Animated Background Elements */}
-      {/* <div className="absolute top-20 right-10 w-32 h-32 bg-gradient-to-r from-blue-400 via-indigo-500 to-slate-600 rounded-full blur-3xl animate-float opacity-30"></div>
-      <div className="absolute bottom-20 left-10 w-24 h-24 bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-600 rounded-full blur-2xl animate-float opacity-40" style={{ animationDelay: '1s' }}></div>
-      
-      <div className="absolute top-32 left-20 animate-float">
-        <BookOpen className="w-8 h-8 text-blue-500 opacity-60" style={{ animationDelay: '0.5s' }} />
-      </div>
-      <div className="absolute top-40 right-32 animate-float">
-        <DollarSign className="w-6 h-6 text-green-500 opacity-70" style={{ animationDelay: '1.5s' }} />
-      </div>
-      <div className="absolute bottom-32 right-20 animate-float">
-        <Target className="w-7 h-7 text-indigo-500 opacity-60" style={{ animationDelay: '2s' }} />
-      </div>
-      <div className="absolute bottom-40 left-32 animate-float">
-        <Trophy className="w-6 h-6 text-yellow-500 opacity-70" style={{ animationDelay: '2.5s' }} />
-      </div> */}
-      
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Content */}
@@ -66,7 +42,6 @@ const Hero = () => {
                   Empower. Educate. Excel.
                 </span>
                 <Trophy className="w-8 h-8 text-yellow-500" />
-                {/* <Trophy className="w-8 h-8 text-yellow-500 animate-bounce" /> */}
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed max-w-lg lg:max-w-none mx-auto lg:mx-0">
                 Join thousands of students across India in the most comprehensive financial literacy competition. 
@@ -103,7 +78,6 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 max-w-sm sm:max-w-none mx-auto lg:mx-0 animate-fade-in" style={{ animationDelay: '1.2s' }}>
               <Button 
                 onClick={() => navigate('/role-selection')}
-                // onClick={() => scrollToSection('register')}
                 size="lg"
                 className="bg-gradient-to-r from-slate-700 via-blue-700 to-indigo-700 hover:from-slate-800 hover:via-blue-800 hover:to-indigo-800 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl border-0 group w-full sm:w-auto"
               >
@@ -114,7 +88,6 @@ const Hero = () => {
               </Button>
               <a href="/assets/Brochure2.pdf" download>
               <Button 
-                // onClick={() => scrollToSection('about')}
                 variant="outline"
                 size="lg"
                 className="border-3 border-blue-600 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl w-full sm:w-auto group border-blue-600"
@@ -130,14 +103,11 @@ const Hero = () => {
 
           {/* Right Image */}
           <div className="relative  order-first lg:order-last" style={{ animationDelay: '0.3s' }}>
-          {/* <div className="relative animate-scale-in order-first lg:order-last" style={{ animationDelay: '0.3s' }}> */}
             <div className="relative z-10 group">
               <img 
                 src="/assets/Banner6.png" 
-                // src="/assets/Nflo_poster.jpg" 
                 alt="Financial Literacy Olympiad 2025 Poster" 
                 className="w-full max-w-sm sm:max-w-md lg:max-w-[38rem] mx-auto rounded-3xl shadow-3xl border-4 border-gradient-to-r from-blue-400 to-indigo-400"
-                // className="w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto rounded-3xl shadow-3xl hover:scale-105 transition-all duration-700 group-hover:shadow-4xl border-4 border-gradient-to-r from-blue-400 to-indigo-400"
               />
             </div>
           </div>

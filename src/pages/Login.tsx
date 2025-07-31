@@ -25,19 +25,16 @@ const Login = () => {
     try {
       const res = await loginApi({ mobile: formData.mobile });
       if (res?.status) {
-        // Save userType logic if needed
         toast({
           title: "Registration Successful!",
           description: res?.message || "Registration Successful!",
         });
-        // navigate(`/otp-verification/${formData.mobile}`);
         navigate("/otp-verification", {
           state: { mobile: formData.mobile },
         });
 
 
       } else {
-        // Show error (use toast or alert)
         toast({
           title: "Failed to send OTP",
           description: res?.message || "Failed to send OTP",
@@ -53,7 +50,6 @@ const Login = () => {
     } finally {
       setLoading(false)
     }
-    // navigate('/otp-verification');
   };
 
   return (
@@ -70,12 +66,6 @@ const Login = () => {
               <p className="text-gray-600">
                 We'll send an OTP to your registered mobile number for verification.
               </p>
-              {/* <div className="mt-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-                <strong>Test Credentials:</strong><br />
-                School: 9999xxxxxx<br />
-                Resource Person: 9014723678<br />
-                Student: Any other number
-              </div> */}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">

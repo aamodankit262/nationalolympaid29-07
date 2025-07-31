@@ -4,20 +4,6 @@ import { Link, NavLink } from 'react-router-dom';
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white py-8 sm:py-12 animate-fade-in relative overflow-hidden">
-      {/* Floating Financial Icons */}
-      {/* <div className="absolute top-8 left-20 animate-float opacity-20">
-        <BookOpen className="w-6 h-6 text-blue-300" style={{ animationDelay: '0.5s' }} />
-      </div>
-      <div className="absolute top-12 right-32 animate-float opacity-20">
-        <Trophy className="w-5 h-5 text-yellow-300" style={{ animationDelay: '1.5s' }} />
-      </div>
-      <div className="absolute bottom-16 left-32 animate-float opacity-20">
-        <DollarSign className="w-5 h-5 text-green-300" style={{ animationDelay: '2s' }} />
-      </div>
-      <div className="absolute bottom-20 right-20 animate-float opacity-20">
-        <Target className="w-6 h-6 text-indigo-300" style={{ animationDelay: '2.5s' }} />
-      </div> */}
-
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Company Info */}
@@ -29,7 +15,6 @@ const Footer = () => {
                     src="/assets/safeLogo.webp"
                     alt="SAFE Academy Logo"
                     className="h-8 sm:h-10 w-auto"
-                  // className="h-8 sm:h-10 w-auto group-hover:scale-110 transition-transform duration-300"
                   />
                 </Link>
               </div>
@@ -106,11 +91,6 @@ const Footer = () => {
               >Privacy Policy</NavLink>
             </div>
           </div>
-          {/* <div className="mt-3 sm:mt-4 flex items-center justify-center space-x-1 text-xs sm:text-sm text-white/70">
-            <span>Made with</span>
-            <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-400 fill-current animate-pulse" />
-            <span>for financial education</span>
-          </div> */}
         </div>
       </div>
     </footer>

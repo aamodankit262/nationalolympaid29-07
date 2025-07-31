@@ -12,24 +12,15 @@ import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import LoaderWithBackground from '@/components/LoaderWithBackground';
 import { useToast } from '@/hooks/use-toast';
 import Footer from '@/components/Footer';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 const PaymentGateway = () => {
   const [loading, setLoading] = useState(false);
   const { token, logout, userDetails, isLogin } = useAuthStore();
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [category, setCategory] = useState(null);
   const [plans, setPlans] = useState([]);
-  const [selectMedium, setSelectMedium] = useState<string | null>(null);
   const navigate = useNavigate();
   const { error, Razorpay } = useRazorpay();
   const { toast } = useToast();
-  //  console.log(userDetails, 'user')
   useEffect(() => {
     if (!userDetails) return null;
 
@@ -41,21 +32,7 @@ const PaymentGateway = () => {
 
     }
   }, [userDetails, navigate]);
-  // useEffect(() => {
-  //   if (!userDetails) return null;
-
-  //   if (userDetails.isPayment === 1) {
-  //     navigate("/dashboard", { replace: true });
-
-  //   } if (userDetails.type !== "student") {
-  //     navigate("/home", { replace: true });
-
-  //   }
-  // }, [userDetails, navigate]);
-
-
   const getCategory = async () => {
-    // console.log(userDetails?.category_id, 'userDetails in payment gateway')
     setLoading(true);
     try {
       const response = await postApi(APIPATH.categoryPrice, { category_id: userDetails?.category_id }, token, logout);
@@ -75,19 +52,11 @@ const PaymentGateway = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     getCategory();
-    // getProfile();
   }, []);
-  // useEffect(() => {
-  //   getProfile()
-
-  // }, [])
-
   const handlePlanSelect = (plan: any) => {
     setSelectedPlan(plan);
-    // console.log('Selected plan:', plan);
   };
 
   const buyCourse = (transaction_id: string) => {
@@ -108,18 +77,14 @@ const PaymentGateway = () => {
 
     postApi(APIPATH.saveOrder, body, token, logout)
       .then((resp) => {
-        // console.log(resp, 'saveorder...........')
         const { success, message } = resp;
         if (success) {
-          // setSaveOrderdata(resp)
           toast({
             title: "Payment Successful",
             description: message || "Payment Successful",
             variant: "default",
           });
-          // getProfile()
           navigate("/plans/payment-success");
-          // window.location.href = payment_url;
         } else {
           toast({
             title: "Failed to save order",
@@ -139,15 +104,12 @@ const PaymentGateway = () => {
 
     const options: RazorpayOrderOptions = {
       key: RAZOR_API_KEY,
-      // amount: 1,
       amount: selectedPlan?.value,
       currency: "INR",
       name: "Plan",
       description: selectedPlan?.title,
-      order_id: order_id, // Generate order_id on server
+      order_id: order_id, 
       handler: (response) => {
-        // console.log(response, 'handlePayment');
-        // alert("Payment Successful!");
         buyCourse(response?.razorpay_payment_id);
       },
       prefill: {
@@ -175,7 +137,6 @@ const PaymentGateway = () => {
     setLoading(true);
     postApi(
       APIPATH.createOrder,
-      // { amount: 1 },
       { amount: selectedPlan?.value },
       token,
       logout
@@ -200,9 +161,6 @@ const PaymentGateway = () => {
   return (
     <>
       <LoaderWithBackground visible={loading} />
-      {/* {isLoading &&
-        <LoaderWithBackground visible={isLoading} />
-      } */}
       {error && <p>Error loading Razorpay: {error}</p>}
       <Header />
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -230,10 +188,7 @@ const PaymentGateway = () => {
               Choose Your Learning Path
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {/* Select the perfect package for your Financial Literacy Olympiad journey.
-            All plans include exam access and digital certification. */}
               <span className="text-blue-600 font-semibold">
-                {/* {userDetails && userDetails.name ? userDetails.name.toUpperCase() : "User"} */}
                 {userDetails?.name ? userDetails.name.split(" ")[0].toUpperCase() : "User"}
               </span>
               {userDetails && userDetails.mobile ? (
@@ -261,7 +216,6 @@ const PaymentGateway = () => {
                   <div className="mb-4 flex justify-center">
                     <div className={`p-4 rounded-full bg-white shadow-lg ring-4 ring-opacity-20  ring-purple-200
                   `}>
-                      {/* <Trophy className="w-8 h-8 text-blue-600" /> */}
                       <BookOpen className="w-8 h-8 text-purple-600" />
                     </div>
                   </div>
@@ -291,67 +245,16 @@ const PaymentGateway = () => {
               </Card>
             ))}
           </div>
-          {/* Terms and Conditions */}
-          {/* {selectedPlan && (
-            <div className="text-center mb-8 animate-fade-in">
-              <div className="max-w-2xl mx-auto p-4 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200">
-                <p className="text-sm text-gray-600 mb-3">
-                  By proceeding with the payment, you agree to our{' '}
-                  <span className="text-blue-600 hover:underline cursor-pointer font-semibold">
-                    Terms and Conditions
-                  </span>
-                  {' '}and{' '}
-                  <span className="text-blue-600 hover:underline cursor-pointer font-semibold">
-                    Privacy Policy
-                  </span>
-                  . Please review all plan details before making your selection.
-                </p>
-                <p className="text-xs text-gray-500">
-                  ✓ Secure payment processing | ✓ No hidden charges | ✓ Instant access upon payment
-                </p>
-              </div>
-            </div>
-          )} */}
-          {/* {selectedPlan === plans[0] && (
-            <div className="flex flex-col gap-1 max-w-xs mb-5 items-center">
-              <label className="text-sm font-medium text-gray-700">
-                Select Medium <span className="text-red-500">*</span>
-              </label>
-
-              <Select
-                value={selectMedium || ""}
-                onValueChange={(value) => setSelectMedium(value)}
-              >
-                <SelectTrigger className="h-9 text-sm px-3 py-1 border border-gray-300 rounded-md">
-                  <SelectValue placeholder="Select Medium" />
-                </SelectTrigger>
-
-                <SelectContent className="text-sm">
-                  {["Hindi", "English"].map((medium) => (
-                    <SelectItem key={medium} value={medium}>
-                      {medium}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )} */}
-
           {/* Payment Button */}
           <div className="text-center animate-fade-in">
             <Button
               size="lg"
               disabled={!selectedPlan}
-              // disabled={!selectedPlan || (selectedPlan === plans[0] && !selectMedium)}
               onClick={createOrder}
               className={`px-12 py-4 text-lg font-semibold rounded-full transition-all duration-300 ${selectedPlan
                 ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl hover:scale-105'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
-              // className={`px-12 py-4 text-lg font-semibold rounded-full transition-all duration-300 ${selectedPlan && (selectedPlan !== plans[0] || selectMedium)
-              //   ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl hover:scale-105'
-              //   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              //   }`}
             >
               {selectedPlan ? 'Proceed to Payment' : 'Select a Plan to Continue'}
             </Button>

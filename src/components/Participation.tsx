@@ -6,13 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Participation = () => {
   const navigate = useNavigate()
-  // const scrollToSection = (sectionId: string) => {
-  //   const element = document.getElementById(sectionId);
-  //   if (element) {
-  //     element.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // };
-
   const categories = [
     {
       title: "Class 6th & 8th",
@@ -87,15 +80,7 @@ const Participation = () => {
         {/* Eligibility Criteria */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
           <div className="animate-fade-in">
-            {/* <h3 className="text-3xl font-bold mb-6 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent font-poppins">Eligibility Criteria</h3> */}
             <div className="space-y-6">
-              {/* <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg">1</div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-1">Age Requirements</h4>
-                  <p className="text-gray-600">Must be between 14-30 years of age at the time of registration</p>
-                </div>
-              </div> */}
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg">1</div>
                 <div>
@@ -116,7 +101,6 @@ const Participation = () => {
               <h4 className="text-lg font-semibold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">Find Your Category!</h4>
               <p className="text-gray-600 mb-4">Join the competition that matches your educational level and start your financial literacy journey.</p>
               <Button
-                // onClick={() => scrollToSection('register')}
                 onClick={() => navigate('/role-selection')}
 
                 className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"

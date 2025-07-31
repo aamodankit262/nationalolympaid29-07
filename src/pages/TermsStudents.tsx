@@ -1,4 +1,3 @@
-// import { Header } from "@radix-ui/react-accordion";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 const TermsStudents = () => {

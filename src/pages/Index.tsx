@@ -13,9 +13,6 @@ const Awards = lazy(() => import('../components/Awards'));
 const Registration = lazy(() => import('../components/Registration'));
 const Contact = lazy(() => import('../components/Contact'));
 const Footer = lazy(() => import('../components/Footer'));
-
-// import { FloatingImageButton } from '@/components/FloatingImageButton';
-
 const Index = () => {
  
   return (

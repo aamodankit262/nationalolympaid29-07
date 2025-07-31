@@ -112,17 +112,6 @@ const Contact = () => {
                     </div>
                   </div>
                 </div>
-                
-                {/* <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-lg border border-gradient-to-r from-indigo-200 to-pink-200">
-                  <h5 className="font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">QR Code for Quick Access</h5>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Scan the QR code on our poster to quickly access the Google Form link for registration and more information.
-                  </p>
-                  <img src="/assets/SCANNER.png" style={{width: '150px'}} alt="scanner" />
-                  <div className="text-xs text-gray-500">
-                    * QR code available on the official competition poster
-                  </div>
-                </div> */}
               </CardContent>
             </Card>
           </div>

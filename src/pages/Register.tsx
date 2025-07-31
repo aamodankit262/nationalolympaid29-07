@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
-// import { Upload } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
-import RegistrationSuccessDialog from "@/components/RegistrationSuccessDialog";
 import { useQuery } from "@tanstack/react-query";
 import { getApi, postApi } from "@/services/services";
 import { APIPATH } from "@/api/urls";
 import { useAuthStore } from "@/store/auth/authStore";
 import LoaderWithBackground from "@/components/LoaderWithBackground";
 import DatePicker from "react-datepicker";
-// Add these imports at the top of your file
 import {
   Select,
   SelectTrigger,
@@ -21,13 +18,11 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import "react-datepicker/dist/react-datepicker.css";
-// import { Label } from '@/components/ui/label';
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [formData, setFormData] = useState({
     studentName: "",
     dateOfBirth: "",
@@ -35,38 +30,30 @@ const Register = () => {
     mobile: "",
     gender: "male",
     userAddress: "",
-    // Category selection
     category: "",
-    // Parents Information
     parentName: "",
     parentEmail: "",
     parentMobile: "",
-    // School Details
     schoolName: "",
     standard: "",
     schoolAddress: "",
     state: "",
     city: "",
     pinCode: "",
-    // Student Documents
     aadharFront: null,
     aadharBack: null,
-    // Institute Information (only for college category)
     alternateMobile: "",
     instituteName: "",
     instituteCode: "",
-
-    // Refer Code
     referCode: "",
   });
   const navigate = useNavigate();
   const [cities, setCities] = useState<any[]>([]);
-   const [referralCode, setReferralCode] = useState("");
   const { toast } = useToast();
   const { token, logout } = useAuthStore();
   const location = useLocation();
   const role = location.state?.role || "student"; // Default to 'student' if not provided
-
+  const [isReferralReadOnly, setIsReferralReadOnly] = useState(false);
   const { isPending, isError, error, data, isLoading } = useQuery({
     queryKey: ["classCatAndStates"],
     queryFn: async () => {
@@ -74,19 +61,12 @@ const Register = () => {
         getApi(APIPATH.category, token, logout),
         getApi(APIPATH.states, token, logout),
       ]);
-
-      // console.log(categoryRes.data, stateRes.data, "both responses");
-
       return {
         categories: categoryRes.data,
         states: stateRes.data,
       };
     },
   });
-  // console.log(data.categories, 'cate')
-  // if (isLoading) return <p>loadding...</p>
-  // if (error) return 'An error has occurred: ' + error.message
-  // Add this above your component or inside the component before return
   const standardOptions: Record<string, { value: string; label: string }[]> = {
     "1": [
       { value: "6", label: "Class 6" },
@@ -104,20 +84,18 @@ const Register = () => {
     "4": [{ value: "college", label: "College Student" }],
   };
   useEffect(() => {
-    const queryParams  = new URLSearchParams(location.search)
+    const queryParams = new URLSearchParams(location.search)
     const referral = queryParams.get('ref');
-    if(referral) {
-      // setReferralCode(referral);
-      setFormData((prev) => ({...prev, referCode: referral}));
+    if (referral) {
+      setFormData((prev) => ({ ...prev, referCode: referral }));
+      setIsReferralReadOnly(true);
     }
 
-  },[location.search])
+  }, [location.search])
   useEffect(() => {
     if (formData.state) {
-      // Replace with your actual city API call
       getApi(`${APIPATH.cities}/${formData.state}`, token, logout)
         .then((res) => {
-          // console.log(res.data, "cities");
           setCities(res.data || []);
         })
         .catch(() => setCities([]));
@@ -132,15 +110,12 @@ const Register = () => {
 
     let payload: any = {
       name: formData.studentName,
-      // dob: formData.dateOfBirth,
       email: formData.email,
       mobile: formData.mobile,
-      // gender: formData.gender,
-      type: role, // student, institute, resource, etc.
+      type: role,
       refer_code: formData.referCode,
     };
 
-    // For student role
     if (role === "student") {
       payload = {
         ...payload,
@@ -158,42 +133,13 @@ const Register = () => {
         city: formData.city,
         pincode: formData.pinCode,
       };
-      // Only for college category (id '5')
       if (formData.category === "4") {
-        // delete payload.school_name;
         delete payload.standard;
-        // payload.institute_name = formData.instituteName;
         payload.institute_code = formData.instituteCode;
       }
     }
 
-    // For institute role
-    // if (role === "institute") {
-    //   payload = {
-    //     ...payload,
-
-    //     // Add only institute-specific fields
-    //     // dob: formData.dateOfBirth,
-    //     // gender: formData.gender,
-    //     address: formData.schoolAddress,
-    //     alternate_mobile: formData.alternateMobile,
-    //     instituteName: formData.instituteName,
-    //     institute_code: formData.instituteCode,
-    //     instituteState: formData.state,
-    //     instituteCity: formData.city,
-    //     // institutePinCode: formData.pinCode,
-    //   };
-    // }
-
     // For resource role
-    if (role === "resource") {
-      payload = {
-        ...payload,
-        gender: formData.gender,
-        alternate_mobile: formData.alternateMobile,
-        // dob: formData.dateOfBirth,
-      };
-    }
 
     try {
       const res = await postApi(APIPATH.signUp, payload, token, logout);
@@ -208,9 +154,7 @@ const Register = () => {
         navigate("/otp-verification", {
           state: { mobile: formData.mobile },
         });
-        // navigate(`/otp-verification/${formData.mobile}`);
-
-        // setShowSuccessDialog(true);
+        
       } else {
         toast({
           title: "Registration Failed",
@@ -233,13 +177,6 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50">
       {loading && <LoaderWithBackground visible={loading} />}
       <Header />
-
-      {/* Registration Success Dialog */}
-      <RegistrationSuccessDialog
-        open={showSuccessDialog}
-        onClose={() => setShowSuccessDialog(false)}
-      />
-
       <div className="flex items-center justify-center pt-32 pb-8 px-8">
         <div className="w-full max-w-5xl">
           <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -254,8 +191,6 @@ const Register = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Category Selection */}
-              {role !== "institute" && role !== "resource" && (
-                <>
                   <div className="bg-[#7BA7BC] text-white px-4 py-2 rounded-t-lg">
                     <h3 className="font-semibold">Select Category</h3>
                   </div>
@@ -292,40 +227,20 @@ const Register = () => {
                       </Select>
                     </div>
                   </div>
-                </>
-              )}
+                
 
               {/* Personal Details */}
               <div className="bg-[#7BA7BC] text-white px-4 py-2 rounded-t-lg">
                 <h3 className="font-semibold">
-                  {role == `institute`
-                    ? `School Representative Details`
-                    : `Personal Details`}
+                  Personal Details
                 </h3>
               </div>
               <div className="border border-gray-200 rounded-b-lg p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {/* {role == `institute` ? `School Representative Name / प्रतिनिधि का नाम *` : role == `resource` ? `Name of Person *` : `Name of Student *`} */}
-                      {role === "institute" ? (
-                        <>
-                          School Representative Name{" "}
-                          <span className="text-red-500">*</span>
-                          <br />
-                          {/* <span className="text-sm text-gray-700">प्रतिनिधि का नाम *</span> */}
-                        </>
-                      ) : role === "resource" ? (
-                        <>
-                          Name of Person <span className="text-red-500">*</span>
-                        </>
-                      ) : (
-                        <>
                           Name of Student{" "}
                           <span className="text-red-500">*</span>
-                        </>
-                      )}
-                      {/* Name of Student / छात्र का नाम * */}
                     </label>
                     <Input
                       type="text"
@@ -338,13 +253,7 @@ const Register = () => {
                             .replace(/\b\w/g, (char) => char.toUpperCase()),
                         })
                       }
-                      placeholder={
-                        role === "institute"
-                          ? "Enter Representative's Name "
-                          : role === "resource"
-                            ? "Enter Person's Name "
-                            : "Enter Student's Name "
-                      }
+                      placeholder="Enter Student's Name "
                     // required
                     />
                   </div>
@@ -376,7 +285,7 @@ const Register = () => {
                         max={10}
                         value={formData.mobile}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
+                          const value = e.target.value.replace(/\D/g, "");
                           if (value.length <= 10) {
                             setFormData({ ...formData, mobile: value });
                           }
@@ -387,41 +296,7 @@ const Register = () => {
                       />
                     </div>
                   </div>
-
-                  {role !== "student" && (
-                    <>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Alternate Mobile Number / मोबाइल नंबर
-                        </label>
-                        <div className="flex">
-                          <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
-                            +91
-                          </span>
-                          <Input
-                            type="tel"
-                            max={10}
-                            value={formData.alternateMobile}
-                            onChange={(e) => {
-                              const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
-                              if (value.length <= 10) {
-                                setFormData({
-                                  ...formData,
-                                  alternateMobile: value,
-                                });
-                              }
-                            }}
-                            placeholder="Enter Mobile Number"
-                            className="rounded-l-none"
-                          // required
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
                 </div>
-                {role === "student" && (
-                  <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -566,7 +441,6 @@ const Register = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Pin Code / पिन कोड
-                          {/* <span className="text-red-500">*</span> */}
                         </label>
                         <Input
                           type="text"
@@ -576,15 +450,6 @@ const Register = () => {
                         />
                       </div>
                     </div>
-                    {/* <div className="gird grid-cols-2">
-                      
-                    </div> */}
-
-                  </>
-                )}
-                {/* </div> */}
-
-
               </div>
 
               {/* Parents Information */}
@@ -641,15 +506,13 @@ const Register = () => {
                       <Input
                         type="tel"
                         value={formData.parentMobile}
-                        // onChange={(e) => setFormData({ ...formData, parentMobile: e.target.value })}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
+                          const value = e.target.value.replace(/\D/g, ""); 
                           if (value.length <= 10) {
                             setFormData({ ...formData, parentMobile: value });
                           }
                         }}
                         placeholder="Enter Mobile Number"
-                        // placeholder="Enter Mobile number of Parent / Guardian"
                         required
                       />
                     </div>
@@ -658,9 +521,7 @@ const Register = () => {
               )}
 
               {/* School Details */}
-              {role !== "resource" &&
-                role !== `institute` &&
-                formData.category !== "4" && (
+              {formData.category !== "4" && (
                   <>
                     <div className="bg-[#7BA7BC] text-white px-4 py-2 rounded-t-lg">
                       <h3 className="font-semibold">School Details</h3>
@@ -736,23 +597,12 @@ const Register = () => {
                           required
                         />
                       </div>
-                      {/* <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        School Pin Code / स्कूल पिन कोड <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        type="text"
-                        value={formData.pinCode}
-                        onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
-                        placeholder="Enter School Pin Code"
-                      />
-                    </div> */}
                     </div>
                   </>
                 )}
 
               {/* Institute Information - Only show for college category */}
-              {(role === "institute" || formData.category === "4") && (
+              {(formData?.category === "4") && (
                 <>
                   <div className="bg-[#7BA7BC] text-white px-4 py-2 rounded-t-lg">
                     <h3 className="font-semibold">Institute Information</h3>
@@ -779,7 +629,6 @@ const Register = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Institute Code
-                          {/* <span className="text-red-500">*</span> */}
                         </label>
                         <Input
                           type="text"
@@ -795,63 +644,6 @@ const Register = () => {
                         />
                       </div>
                     </div>
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          State / राज्य <span className="text-red-500">*</span>
-                        </label>
-                        <Select
-                          value={formData.state}
-                          onValueChange={(value) =>
-                            setFormData({ ...formData, state: value })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select State" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {data?.states?.map(
-                              (state: { id: string; name: string }) => (
-                                <SelectItem
-                                  key={state.id}
-                                  value={state.id.toString()}
-                                >
-                                  {state?.name}
-                                </SelectItem>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          City / शहर <span className="text-red-500">*</span>
-                        </label>
-                        <Select
-                          value={formData.city}
-                          onValueChange={(value) =>
-                            setFormData({ ...formData, city: value })
-                          }
-                          disabled={!formData.state}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select City" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {cities?.map(
-                              (city: { id: string; name: string }) => (
-                                <SelectItem
-                                  key={city.id}
-                                  value={city.id.toString()}
-                                >
-                                  {city?.name}
-                                </SelectItem>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div> */}
                     <div className="mt-4">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Institute Address{" "}
@@ -872,12 +664,7 @@ const Register = () => {
                   </div>
                 </>
               )}
-
-              {/* Refer Code */}
-              {/* <div className="bg-[#7BA7BC] text-white px-4 py-2 rounded-t-lg">
-                <h3 className="font-semibold">If you have any Refer Code</h3>
-              </div> */}
-              {role === "student" && (
+             
                 <div className="border border-gray-200 rounded-b-lg p-4 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -887,8 +674,12 @@ const Register = () => {
                       type="text"
                       value={formData.referCode}
                       onChange={(e) => setFormData({ ...formData, referCode: e.target.value })}
+                      disabled={isReferralReadOnly}
                       placeholder="Enter Refer Code"
                     />
+                    {isReferralReadOnly && (
+                      <p className="text-xs text-gray-500 mt-1">Referral code auto-filled from link</p>
+                    )}
                   </div>
 
                   <div className="flex items-start space-x-2">
@@ -907,13 +698,9 @@ const Register = () => {
                     </label>
                   </div>
                 </div>
-              )}
-
-
               <Button
                 type="submit"
                 className="w-full bg-[#1B4A5C] hover:bg-[#1B4A5C]/90 text-white py-3 rounded-lg font-semibold"
-              // disabled={!isFormValid()}
               >
                 Send OTP
               </Button>
@@ -946,9 +733,6 @@ const Register = () => {
                     Terms and Conditions
                   </Link>
                 )}{" "}
-                {/* <a href="#" className="text-blue-600 hover:underline">
-                  Terms and conditions
-                </a> */}
               </p>
             </div>
           </div>

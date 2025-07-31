@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Users, UserCog } from 'lucide-react';
+import { Users, UserCog, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -13,7 +13,7 @@ const RoleSelection = () => {
     if (selectedRole === 'student') {
       navigate('/register', { state: { role: selectedRole } });
     } else if (selectedRole === 'institute') {
-    navigate('/register', { state: { role: selectedRole } });
+    navigate('/school-register', { state: { role: selectedRole } });
     } else if (selectedRole === 'resource') {
       navigate('/resource-register', { state: { role: selectedRole } });
     }
@@ -27,13 +27,13 @@ const RoleSelection = () => {
       icon: Users,
       selected: selectedRole === 'student'
     },
-    // {
-    //   id: 'institute',
-    //   title: 'Register As Institutes',
-    //   description: 'Set up your institute profile in just a few steps',
-    //   icon: Building2,
-    //   selected: selectedRole === 'institute'
-    // },
+    {
+      id: 'institute',
+      title: 'Register As Institutes',
+      description: 'Set up your institute profile in just a few steps',
+      icon: Building2,
+      selected: selectedRole === 'institute'
+    },
     {
       id: 'resource',
       title: 'Register As Resource Persons',

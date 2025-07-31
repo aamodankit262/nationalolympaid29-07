@@ -40,13 +40,8 @@ const ResourcePersonDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const { logout, userDetails, token } = useAuthStore()
-  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState(initialFilters);
-
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>([]);
-
-  const [cities, setCities] = useState([]);
-
   useEffect(() => {
     const fetchFilters = async () => {
       const [states, categories] = await Promise.all([
@@ -146,7 +141,7 @@ const ResourcePersonDashboard = () => {
       filters.state === "all" || referral.state_id === filters.state;
 
     const matchesCity =
-      filters.city === "all" || referral.city_id === filters.city;
+      filters.city === "all" || Number(referral.city_id) === Number(filters.city);
 
     const matchesCategory =
       filters.category === "all" || referral.category_id === filters.category;
@@ -157,20 +152,14 @@ const ResourcePersonDashboard = () => {
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
 
-    // Reset city if state changes
     if (key === "state") {
       setFilters((prev) => ({ ...prev, city: "all", state: value }));
     }
   };
   const handleResetFilters = () => {
     setFilters(initialFilters);
-    // clear dependent data if needed
   };
-  // useEffect(() => {
-  //   if (userDetails?.type !== 'resource') {
-  //     navigate('/home', { replace: true });
-  //   }
-  // }, [userDetails, navigate]);
+ 
   const handleLogout = () => {
     logout()
     navigate('/login');
@@ -205,14 +194,6 @@ const ResourcePersonDashboard = () => {
       color: "text-blue-600",
       bgColor: "bg-blue-50"
     },
-    // {
-    //   title: "Referral Code",
-    //   value: `${dashboardData?.referral_code}`,
-    //   // description: "Lifetime earnings",
-    //   icon: CodeSquare,
-    //   color: "text-green-600",
-    //   bgColor: "bg-green-50"
-    // },
     {
       title: "Referral Code",
       value: dashboardData?.referral_code,
@@ -229,54 +210,8 @@ const ResourcePersonDashboard = () => {
       color: "text-blue-600",
       bgColor: "bg-blue-50"
     },
-    // {
-    //   title: "Total Earnings",
-    //   value: `₹ ${dashboardData?.total_earning}`,
-    //   description: "Lifetime earnings",
-    //   icon: DollarSign,
-    //   color: "text-green-600",
-    //   bgColor: "bg-green-50"
-    // },
-    // {
-    //   title: "This Month",
-    //   value: `₹ ${dashboardData?.current_month_earning}`,
-    //   description: "Current month earnings",
-    //   icon: TrendingUp,
-    //   color: "text-purple-600",
-    //   bgColor: "bg-purple-50"
-    // },
-    // {
-    //   title: "Pending Payment",
-    //   value: `₹ ${dashboardData?.pending_payment}`,
-    //   description: "Awaiting payment",
-    //   icon: Wallet,
-    //   color: "text-orange-600",
-    //   bgColor: "bg-orange-50"
-    // }
   ];
 
-  // const recentReferrals = [
-  //   { name: "Rahul Sharma", mobile: "9876543210", date: "2024-06-20", status: "Active", earnings: "₹200", registrationDate: "2024-06-18" },
-  //   { name: "Priya Patel", mobile: "9876543211", date: "2024-06-18", status: "Active", earnings: "₹200", registrationDate: "2024-06-16" },
-  //   { name: "Amit Kumar", mobile: "9876543212", date: "2024-06-15", status: "Pending", earnings: "₹150", registrationDate: "2024-06-13" },
-  //   { name: "Sneha Gupta", mobile: "9876543213", date: "2024-06-12", status: "Active", earnings: "₹200", registrationDate: "2024-06-10" },
-  //   { name: "Rohan Singh", mobile: "9876543214", date: "2024-06-10", status: "Active", earnings: "₹200", registrationDate: "2024-06-08" },
-  //   { name: "Kavya Reddy", mobile: "9876543215", date: "2024-06-08", status: "Verified", earnings: "₹180", registrationDate: "2024-06-06" }
-  // ];
-
-  // const paymentHistory = [
-  //   { date: "2024-06-01", amount: "₹4,200", status: "Paid", method: "Bank Transfer", referrals: 21, transactionId: "TXN001234" },
-  //   { date: "2024-05-01", amount: "₹3,800", status: "Paid", method: "UPI", referrals: 19, transactionId: "TXN001235" },
-  //   { date: "2024-04-01", amount: "₹5,200", status: "Paid", method: "Bank Transfer", referrals: 26, transactionId: "TXN001236" },
-  //   { date: "2024-03-01", amount: "₹2,900", status: "Paid", method: "UPI", referrals: 15, transactionId: "TXN001237" }
-  // ];
-
-  // const referralStats = [
-  //   { month: "June 2024", referrals: 23, earnings: "₹3,200", status: "Current" },
-  //   { month: "May 2024", referrals: 19, earnings: "₹3,800", status: "Paid" },
-  //   { month: "April 2024", referrals: 26, earnings: "₹5,200", status: "Paid" },
-  //   { month: "March 2024", referrals: 15, earnings: "₹2,900", status: "Paid" }
-  // ];
 
   return (
     <>
@@ -299,13 +234,6 @@ const ResourcePersonDashboard = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              {/* <Button variant="ghost" size="sm">
-              <Bell className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <User className="h-4 w-4" />
-            </Button> */}
-              {/* <Button className="bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"> */}
               <Button className="bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900  text-white px-6  rounded-full font-semibold">
                 Hi, {userDetails?.name}
               </Button>
@@ -339,24 +267,6 @@ const ResourcePersonDashboard = () => {
               >
                 My Referrals
               </button>
-              {/* <button
-                onClick={() => setActiveTab('payments')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${activeTab === 'payments'
-                  ? 'border-safe-blue text-safe-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-              >
-                Payments
-              </button> */}
-              {/* <button
-                onClick={() => setActiveTab('analytics')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${activeTab === 'analytics'
-                  ? 'border-safe-blue text-safe-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-              >
-                Analytics
-              </button> */}
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`py-4 px-2 border-b-2 font-medium text-sm ${activeTab === 'profile'
@@ -388,15 +298,6 @@ const ResourcePersonDashboard = () => {
                             <p className="text-2xl font-bold text-gray-900">{stat?.value}</p>
                             {stat?.link && (
                               <div className="mt-2 flex items-center gap-2">
-                                {/* <a
-                                  href={stat.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-xs text-blue-600 hover:underline"
-                                >
-                                  {stat.link}
-                                </a> */}
-
                                 <Button
                                   variant='outline'
                                   onClick={() => {
@@ -416,16 +317,7 @@ const ResourcePersonDashboard = () => {
                             <p className="text-xs text-gray-500">{stat?.description}</p>
                           </div>
                           <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
-                            {/* <button onClick={() => {
-                              navigator.clipboard.writeText(stat.value);
-                              toast({
-                                      title: "Code Copied",
-                                      // description: message,
-                                      variant: "default",
-                                    });
-                            }}> */}
                             <IconComponent className={`w-6 h-6 ${stat.color}`} />
-                            {/* </button> */}
                           </div>
                         </div>
                       </CardContent>
@@ -433,31 +325,6 @@ const ResourcePersonDashboard = () => {
                   );
                 })}
               </div>
-
-              {/* Quick Actions */}
-              {/* <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                  <CardDescription>Start referring students and boost your earnings</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-4">
-                    <Button className="bg-safe-blue hover:bg-safe-blue/90">
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share Referral Link
-                    </Button>
-                    <Button variant="outline">
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Add New Referral
-                    </Button>
-                    <Button variant="outline">
-                      <DollarSign className="w-4 h-4 mr-2" />
-                      Request Payment
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card> */}
-
               {/* Recent Activity */}
               <Card>
                 <CardHeader>
@@ -490,16 +357,10 @@ const ResourcePersonDashboard = () => {
                                 variant={
                                   referral.is_paid === true
                                     ? "default" : "secondary"
-
                                 }
                               >
                                 {referral.is_paid === true ? "Paid" : "Unpaid"}
-                                {/* {referral.status} */}
                               </Badge>
-
-                              {/* <p className="text-sm font-medium text-green-600 mt-1">
-                              {referral.earnings}
-                            </p> */}
                             </div>
 
                           </div>
@@ -511,15 +372,11 @@ const ResourcePersonDashboard = () => {
                     </Button>
                   </div>
                         </>
-
-
                       ))
                     ) : (
                       <p className="text-gray-500 text-sm">No Referrals found.</p>
                     )}
                   </div>
-
-
                 </CardContent>
               </Card>
             </div>
@@ -601,77 +458,7 @@ const ResourcePersonDashboard = () => {
                   </div>
                 </CardContent>
               </Card>
-
             </>
-
-            // <Card>
-            //   <CardHeader>
-            //     <CardTitle>All Referrals ({dashboardData?.data?.students?.length})</CardTitle>
-            //     <CardDescription>Complete list of students you've referred</CardDescription>
-            //   </CardHeader>
-            //   <CardContent>
-            //     <div className="space-y-4">
-            //       {/* {recentReferrals.map((referral, index) => (
-            //         <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-            //           <div className="flex items-center space-x-4">
-            //             <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
-            //               {referral.name.charAt(0)}
-            //             </div>
-            //             <div>
-            //               <p className="font-medium">{referral.name}</p>
-            //               <p className="text-sm text-gray-500">{referral.mobile}</p>
-            //               <p className="text-xs text-gray-400">Registered: {referral.registrationDate}</p>
-            //             </div>
-            //           </div>
-            //           <div className="text-right">
-            //             <Badge variant={referral.status === 'Active' ? 'default' : referral.status === 'Verified' ? 'secondary' : 'outline'}>
-            //               {referral.status}
-            //             </Badge>
-            //             <p className="text-sm font-medium text-green-600 mt-1">{referral.earnings}</p>
-            //           </div>
-            //         </div>
-            //       ))} */}
-            //       {dashboardData?.data?.students.length > 0 ? (
-            //         dashboardData?.data?.students?.map((referral: any, index: any) => (
-            //           <div
-            //             key={index}
-            //             className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-            //           >
-            //             <div className="flex items-center space-x-4">
-            //               <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
-            //                 {referral?.name.charAt(0)}
-            //               </div>
-            //               <div>
-            //                 <p className="font-medium">{referral?.name}</p>
-            //                 <p className="text-sm text-gray-500">{referral?.mobile}</p>
-            //                 <p className="text-xs text-gray-400">
-            //                   Registered: {referral?.created_at}
-            //                 </p>
-            //               </div>
-            //             </div>
-            //             <div className="text-right">
-            //               <Badge
-            //                 variant={
-            //                   referral.is_paid === true
-            //                     ? "default" : "secondary"
-
-            //                 }
-            //               >
-            //                 {referral.is_paid === true ? "Paid" : "Unpaid"}
-            //                 {/* {referral.status} */}
-            //               </Badge>
-            //               {/* <p className="text-sm font-medium text-green-600 mt-1">
-            //                   {referral.earnings}
-            //                 </p> */}
-            //             </div>
-            //           </div>
-            //         ))
-            //       ) : (
-            //         <p className="text-gray-500 text-sm">No Referrals found.</p>
-            //       )}
-            //     </div>
-            //   </CardContent>
-            // </Card>
           )}
 
           {/* Payments Tab */}
@@ -683,21 +470,7 @@ const ResourcePersonDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* {paymentHistory.map((payment, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{payment.date}</p>
-                      <p className="text-sm text-gray-500">{payment.method} • {payment.referrals} referrals</p>
-                      <p className="text-xs text-gray-400">ID: {payment.transactionId}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-green-600">{payment.amount}</p>
-                      <Badge variant="outline" className="text-green-600">
-                        {payment.status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))} */}
+                  
                   No Payment History
                 </div>
               </CardContent>
@@ -713,27 +486,13 @@ const ResourcePersonDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* {referralStats.map((stat, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium">{stat.month}</p>
-                      <p className="text-sm text-gray-500">{stat.referrals} students referred</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-green-600">{stat.earnings}</p>
-                      <Badge variant={stat.status === 'Current' ? 'secondary' : 'outline'}>
-                        {stat.status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))} */}
+                
                   No Analytics
                 </div>
               </CardContent>
             </Card>
           )}
           {activeTab === 'profile' && (
-            // <Profile/>
             <ResourceProfile />
           )}
         </div>

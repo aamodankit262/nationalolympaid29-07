@@ -8,18 +8,17 @@ import {
   School,
   Edit,
   FileText,
- 
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/auth/authStore";
 import moment from "moment";
-import { getApi, postApi } from "@/services/services";
-import { APIPATH, BASE_URL, MAIN_URL } from "@/api/urls";
+import { postApi } from "@/services/services";
+import { APIPATH, MAIN_URL } from "@/api/urls";
 import { Spinner } from "@/components/Spinner";
 import { DocumentField } from "@/utils/DocumentField";
 import { getProfileApi } from "@/store/auth/authServices";
@@ -30,16 +29,11 @@ const documentFields = [
   { key: "schoolIdCard", label: "School ID Card", accept: ".pdf" },
   { key: "photo", label: "Student Photo", accept: ".jpg,.jpeg,.png" },
 ];
-
-// export const getProfileApi = async (token: string, logout: () => void) => {
-//   return await getApi(APIPATH.getProfile, token, logout);
-// };
 const StudentProfile = () => {
   const [loading, setLoading] = useState(false);
   const { token, logout, userDetails, setUserDetails } = useAuthStore();
   const [isEditing, setIsEditing] = useState(false);
   const [baseUrl, setBaseUrl] = useState(MAIN_URL);
-  // const [profileImage, setProfileImage] = useState<string | File | null>(null);
   const [profileData, setProfileData] = useState({
     name: userDetails?.name,
     email: userDetails?.email,
@@ -68,10 +62,8 @@ const StudentProfile = () => {
     photo: "",
   });
 
-  // Guardian details for students
   const [guardianData, setGuardianData] = useState({
     guardianName: "",
-    // guardianRelation: '',
     guardianMobile: "",
     guardianEmail: "",
   });
@@ -87,42 +79,6 @@ const StudentProfile = () => {
         const user = res.user;
         setUserDetails(user);
         setBaseUrl(res?.baseUrl);
-
-        // // Fetch state and city names if IDs are available
-        // let stateName = "";
-        // let cityName = "";
-
-        // try {
-        //   // Fetch all states and cities
-        //   const [statesRes, citiesRes] = await Promise.all([
-        //     getApi(APIPATH.states, token, logout),
-        //     user.school?.state ? getApi(`${APIPATH.cities}/${user.school.state}`, token, logout) : Promise.resolve({ data: [] })
-        //   ]);
-
-        //   console.log("States response:", statesRes);
-        //   console.log("Cities response:", citiesRes);
-
-        //   // Find state name by ID
-        //   if (user.school?.state && statesRes?.data) {
-        //     const state = statesRes.data.find((s: { id: number; name: string }) => s.id.toString() === user.school.state.toString());
-        //     if (state) {
-        //       stateName = state.name;
-        //       console.log("Found state:", stateName);
-        //     }
-        //   }
-
-        //   // Find city name by ID
-        //   if (user.school?.city && citiesRes?.data) {
-        //     const city = citiesRes.data.find((c: { id: number; name: string }) => c.id.toString() === user.school.city.toString());
-        //     if (city) {
-        //       cityName = city.name;
-        //       console.log("Found city:", cityName);
-        //     }
-        //   }
-        // } catch (error) {
-        //   console.log("Error fetching states/cities:", error);
-        // }
-
         setProfileData({
           name: user.name || "",
           email: user.email || "",
@@ -166,23 +122,24 @@ const StudentProfile = () => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("name", profileData.name || "");
-      formDataToSend.append(
-        "category_id",
-        userDetails?.category_id?.toString() || ""
-      );
-      formDataToSend.append(
-        "dob",
-        profileData.dateOfBirth
-          ? moment(profileData.dateOfBirth, "YYYY-MM-DD").format("YYYY-MM-DD")
-          : ""
-      );
-      formDataToSend.append("email", profileData.email || "");
-      formDataToSend.append("gender", profileData.gender || "");
+      // formDataToSend.append(
+      //   "category_id",
+      //   userDetails?.category_id?.toString() || ""
+      // );
+      // formDataToSend.append(
+      //   "dob",
+      //   profileData.dateOfBirth
+      //     ? moment(profileData.dateOfBirth, "YYYY-MM-DD").format("YYYY-MM-DD")
+      //     : ""
+      // );
+      // formDataToSend.append("email", profileData.email || "");
+      // formDataToSend.append("gender", profileData.gender || "");
       formDataToSend.append("type", profileData.role || "student");
       formDataToSend.append("parent_name", guardianData.guardianName || "");
       formDataToSend.append("parent_email", guardianData.guardianEmail || "");
       formDataToSend.append("parent_mobile", guardianData.guardianMobile || "");
       formDataToSend.append("address", profileData.address || "");
+      formDataToSend.append("user_address", profileData.useAddress || "");
 
       // Only append school/institute/class if they are not empty
       if (profileData.school)
@@ -208,10 +165,6 @@ const StudentProfile = () => {
       if (documentData.photo instanceof File) {
         formDataToSend.append("image", documentData.photo);
       }
-      // for (const pair of formDataToSend.entries()) {
-      //   console.log(pair[0] + ":", pair[1]);
-      // }
-      // Use type=true for multipart
       const res = await postApi(
         APIPATH.updateStudent,
         formDataToSend,
@@ -219,7 +172,6 @@ const StudentProfile = () => {
         logout,
         1
       );
-      // handle response, show toast, etc.
       if (res.status) {
         await fetchProfile();
         toast({
@@ -236,14 +188,6 @@ const StudentProfile = () => {
       setLoading(false);
     }
   };
-
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     setProfileImage(file);
-  //   }
-  // };
-
   return (
     <>
       {loading && (
@@ -264,20 +208,6 @@ const StudentProfile = () => {
               <div className="flex flex-col items-center space-y-4">
                 <div className="relative">
                   <Avatar className="w-24 h-24">
-                    {/* <AvatarImage
-                      src={
-                        profileImage
-                          ? (profileImage instanceof File
-                            ? URL.createObjectURL(profileImage)
-                            : profileImage)
-                          : (typeof documentData.photo === 'string' && documentData.photo
-                            ? documentData.photo.startsWith('http')
-                              ? documentData.photo
-                              : baseUrl + documentData.photo
-                            : undefined)
-                      }
-                      alt="Profile"
-                    /> */}
                     <AvatarFallback className="text-lg">
                       {profileData.name
                         .split(" ")
@@ -286,17 +216,6 @@ const StudentProfile = () => {
                         .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  {/* {isEditing && (
-                    <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
-                      <Camera className="w-4 h-4" />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  )} */}
                 </div>
                 <div className="text-center">
                   <h3 className="font-semibold text-lg">{profileData.name}</h3>
@@ -342,7 +261,6 @@ const StudentProfile = () => {
                     <Input
                       type="email"
                       value={profileData.email}
-                      // onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                       disabled
                     />
                   ) : (
@@ -361,7 +279,7 @@ const StudentProfile = () => {
                     <Input
                       value={profileData.mobile}
                       disabled
-                      // onChange can be omitted or left as is, but it won't be triggered
+                    // onChange can be omitted or left as is, but it won't be triggered
                     />
                   ) : (
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
@@ -377,7 +295,6 @@ const StudentProfile = () => {
                   {isEditing ? (
                     <select
                       value={profileData.gender}
-                      // onChange={(e) => setProfileData({ ...profileData, gender: e.target.value })}
                       disabled
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-safe-blue focus:outline-none"
                     >
@@ -401,7 +318,6 @@ const StudentProfile = () => {
                     <Input
                       type="date"
                       value={profileData.dateOfBirth}
-                      // onChange={(e) => setProfileData({ ...profileData, dateOfBirth: e.target.value })}
                       disabled
                     />
                   ) : (
@@ -425,20 +341,6 @@ const StudentProfile = () => {
                       </p>
                     )}
                   </div>
-                  // <div>
-                  //   <label className="block text-sm font-medium text-gray-700 mb-2">
-                  //     <School className="w-4 h-4 inline mr-2" />
-                  //     Institute Code
-                  //   </label>
-                  //   {isEditing ? (
-                  //     <Input
-                  //       value={profileData.instituteCode}
-                  //       disabled
-                  //     />
-                  //   ) : (
-                  //     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.instituteCode}</p>
-                  //   )}
-                  // </div>
                 )}
               </div>
               {/* State and City Information */}
@@ -455,9 +357,6 @@ const StudentProfile = () => {
                       {profileData.state}
                     </p>
                   )}
-                  {/* <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                    {profileData.state || "Not specified"}
-                  </p> */}
                 </div>
 
                 <div>
@@ -472,9 +371,6 @@ const StudentProfile = () => {
                       {profileData.city}
                     </p>
                   )}
-                  {/* <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                    {profileData.city || "Not specified"}
-                  </p> */}
                 </div>
               </div>
               <div>
@@ -545,171 +441,6 @@ const StudentProfile = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Aadhar Card
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      type="file"
-                      accept=".pdf,"
-                      onChange={(e) => setDocumentData({ ...documentData, aadharCard: e.target.files?.[0] || '' })}
-                    />
-                  ) : (
-
-                    <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                      <FileText className="w-4 h-4 text-gray-500" />
-                      {typeof documentData.aadharCard === 'string' && documentData.aadharCard ? (
-                        <a
-                          href={
-                            documentData.aadharCard.startsWith('http')
-                              ? documentData.aadharCard
-                              : baseUrl + documentData.aadharCard
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View/Download
-                        </a>
-                      ) : (
-                        <span className="text-gray-600">Not uploaded</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Birth Certificate
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      type="file"
-                      accept=".pdf"
-                      onChange={(e) => setDocumentData({ ...documentData, birthCertificate: e.target.files?.[0] || '' })}
-                    />
-                  ) : (
-                    // <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                    //   <FileText className="w-4 h-4 text-gray-500" />
-                    //   <span className="text-gray-600">
-                    //     {typeof documentData.birthCertificate === 'string'
-                    //       ? documentData.birthCertificate || 'Not uploaded'
-                    //       : documentData.birthCertificate instanceof File
-                    //         ? documentData.birthCertificate.name
-                    //         : 'Not uploaded'}
-                    //   </span>
-                    // </div>
-                    <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                      <FileText className="w-4 h-4 text-gray-500" />
-                      {typeof documentData.birthCertificate === 'string' && documentData.birthCertificate ? (
-                        <a
-                          href={
-                            documentData.birthCertificate.startsWith('http')
-                              ? documentData.birthCertificate
-                              : baseUrl + documentData.birthCertificate
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View/Download
-                        </a>
-                      ) : (
-                        <span className="text-gray-600">Not uploaded</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    School ID Card
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      type="file"
-                      accept=".pdf"
-                      onChange={(e) => setDocumentData({ ...documentData, schoolIdCard: e.target.files?.[0] || '' })}
-                    />
-                  ) : (
-                    // <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                    //   <FileText className="w-4 h-4 text-gray-500" />
-                    //   <span className="text-gray-600">
-                    //     {typeof documentData.schoolIdCard === 'string'
-                    //       ? documentData.schoolIdCard || 'Not uploaded'
-                    //       : documentData.schoolIdCard instanceof File
-                    //         ? documentData.schoolIdCard.name
-                    //         : 'Not uploaded'}
-                    //   </span>
-                    // </div>
-                    <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                      <FileText className="w-4 h-4 text-gray-500" />
-                      {typeof documentData.schoolIdCard === 'string' && documentData.schoolIdCard ? (
-                        <a
-                          href={
-
-                            baseUrl + documentData.schoolIdCard
-                          }
-                          // href={
-                          //   documentData.schoolIdCard.startsWith('http')
-                          //     ? documentData.schoolIdCard
-                          //     : baseUrl + documentData.schoolIdCard
-                          // }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View/Download
-                        </a>
-                      ) : (
-                        <span className="text-gray-600">Not uploaded</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Student Photo
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      type="file"
-                      accept=".jpg,.jpeg,.png"
-                      onChange={(e) => setDocumentData({ ...documentData, photo: e.target.files?.[0] || '' })}
-                    />
-                  ) : (
-                    // <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                    //   <FileText className="w-4 h-4 text-gray-500" />
-                    //   <span className="text-gray-600">
-                    //     {typeof documentData.photo === 'string'
-                    //       ? documentData.photo || 'Not uploaded'
-                    //       : documentData.photo instanceof File
-                    //         ? documentData.photo.name
-                    //         : 'Not uploaded'}
-                    //   </span>
-                    // </div>
-                    <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
-                      <FileText className="w-4 h-4 text-gray-500" />
-                      {typeof documentData.photo === 'string' && documentData.photo ? (
-                        <a
-                          href={documentData.photo}
-
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View/Download
-                        </a>
-                      ) : (
-                        <span className="text-gray-600">Not uploaded</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div> */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {documentFields.map((field) => (
                   <DocumentField
@@ -774,7 +505,6 @@ const StudentProfile = () => {
                           });
                         }
                       }}
-                      // onChange={(e) => setGuardianData({ ...guardianData, guardianMobile: e.target.value })}
                     />
                   ) : (
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
@@ -807,7 +537,6 @@ const StudentProfile = () => {
               </div>
               <div className="content-center">
                 <Button
-                  // variant="outline"
                   onClick={() =>
                     isEditing ? handleSave() : setIsEditing(true)
                   }

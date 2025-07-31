@@ -6,10 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth/authStore';
-import moment from 'moment';
-import { getApi, postApi } from '@/services/services';
+import { postApi } from '@/services/services';
 import { APIPATH, MAIN_URL } from '@/api/urls';
 import { getProfileApi } from '@/store/auth/authServices';
 import { DocumentField } from '@/utils/DocumentField';
@@ -17,38 +15,33 @@ import { Spinner } from '@/components/Spinner';
 import { toast } from '@/hooks/use-toast';
 const documentFields = [
   { key: 'aadharCard', label: 'Aadhar Card', accept: '.pdf' },
-  // { key: 'birthCertificate', label: 'Birth Certificate', accept: '.pdf' },
   { key: 'schoolIdCard', label: 'Institute ID', accept: '.pdf' },
   { key: 'photo', label: 'School Representative Photo', accept: '.jpg,.jpeg,.png' },
 ];
 const bankFields = [
-  // { key: 'aadharCard', label: 'Aadhar Card', accept: '.pdf' },
   { key: 'cancelledCheque', label: 'Cancelled Cheque', accept: '.pdf' },
   { key: 'panCard', label: 'Pan Card', accept: '.pdf' },
-  // { key: 'photo', label: 'Passbook Image', accept: '.jpg,.jpeg,.png' },
 ];
 const InstituteProfile = () => {
   const [loading, setLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false);
-  // const [profileImage, setProfileImage] = useState<string | null>(null);
   const { token, logout, userDetails, setUserDetails } = useAuthStore();
   const [baseUrl, setBaseUrl] = useState(MAIN_URL)
   const [profileData, setProfileData] = useState({
-    name: userDetails?.name,
+    InstituteName: userDetails?.name,
     email: userDetails?.email,
     mobile: userDetails?.mobile,
-    // gender: userDetails?.gender,
-    // dateOfBirth: moment(userDetails?.dob).format("YYYY-MM-DD"),
-    address: userDetails?.address || '',
-    InstituteName: '_',
+    pinCode: '-',
+    state: '-',
+    city: '-',
     instituteCode: '_',
     role: userDetails?.type
+
   });
 
 
   const [documentData, setDocumentData] = useState({
     aadharCard: '',
-    // birthCertificate: '',
     schoolIdCard: '',
     photo: ''
   });
@@ -68,22 +61,19 @@ const InstituteProfile = () => {
     setLoading(true);
     try {
       const res = await getProfileApi(token, logout);
-      // console.log(res, 'getprofile')
       if (res?.status && res.user) {
         const user = res.user;
         setUserDetails(user)
         setBaseUrl(res?.baseUrl);
         setProfileData({
-          name: user.name || '',
+          InstituteName: user.name || '',
           email: user.email || '',
           mobile: user.mobile || '',
-          // gender: user.gender || '',
-          // dateOfBirth: user.dob ? moment(user.dob).format("YYYY-MM-DD") : '',
-          address: user.school?.address || '',
-          InstituteName: user.school?.InstituteName || '',
-          // class: user.school?.standard || '',
+          state: user.school?.state || '',
+          city: user.school?.city || '',
           role: user.type || 'role',
           instituteCode: user.school?.InstituteCode || '',
+          pinCode: user.school?.InstitutePinCode || '',
         });
         setDocumentData({
           aadharCard: user?.aadhar_card || '',
@@ -118,20 +108,15 @@ const InstituteProfile = () => {
       const formDataToSend = new FormData();
 
       // Append institute profile fields
-      formDataToSend.append('name', profileData.name || '');
-      formDataToSend.append('email', profileData.email || '');
-      formDataToSend.append('mobile', profileData.mobile || '');
-      // formDataToSend.append('gender', profileData.gender || '');
-      // formDataToSend.append('dob', profileData.dateOfBirth || '');
-      // formDataToSend.append('address', profileData.address || '');
-      formDataToSend.append('InstituteName', profileData.InstituteName || '');
-      formDataToSend.append('InstituteCode', profileData.instituteCode || '');
+      formDataToSend.append('name', profileData.InstituteName || '');
+      // formDataToSend.append('email', profileData.email || '');
+      // formDataToSend.append('mobile', profileData.mobile || '');
+      formDataToSend.append('instituteCode', profileData.instituteCode || '');
       formDataToSend.append('type', profileData.role || '');
       formDataToSend.append('bankName', bankData.bankName || '');
       formDataToSend.append('accountNumber', bankData.accountNumber || '');
       formDataToSend.append('ifscCode', bankData.ifscCode || '');
       formDataToSend.append('accountHolderName', bankData.accountHolderName || '');
-      // formDataToSend.append('branchName', bankData.branchName || '');
 
       // Attach files if available (handle both File and string)
       if (documentData.aadharCard) {
@@ -139,11 +124,6 @@ const InstituteProfile = () => {
       } else if (typeof documentData.aadharCard === 'string' && documentData.aadharCard) {
         formDataToSend.append('aadhar_card', documentData.aadharCard);
       }
-      // if (documentData.birthCertificate) {
-      //   formDataToSend.append('birth_certificate', documentData.birthCertificate);
-      // } else if (typeof documentData.birthCertificate === 'string' && documentData.birthCertificate) {
-      //   formDataToSend.append('birth_certificate', documentData.birthCertificate);
-      // }
       if (documentData.schoolIdCard) {
         formDataToSend.append('id_card', documentData.schoolIdCard);
       } else if (typeof documentData.schoolIdCard === 'string' && documentData.schoolIdCard) {
@@ -190,36 +170,7 @@ const InstituteProfile = () => {
   };
 
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      setLoading(true)
-      try {
-        const res = await getProfileApi(token, logout);
-        // console.log(res, 'profile')
-        if (res?.status && res.user) {
-          const user = res.user;
-          setProfileData({
-            name: user.name || '',
-            email: user.email || '',
-            mobile: user.mobile || '',
-            // gender: user.gender || '',
-            // dateOfBirth: user.dob ? user.dob.split('T')[0] : '',
-            // dateOfBirth: moment(user?.dob).format("YYYY-MM-DD") || '',
-            address: user.school?.address || '',
-            InstituteName: user.school?.school_name || user.school?.InstituteName || '',
-            // class: user.school?.standard || '',
-            role: user.type || '',
-            instituteCode: user.school?.InstituteCode || '',
-          });
-        }
-      } catch (error) {
-        // handle error (show toast, etc.)
-      } finally {
-        setLoading(false)
-      }
-    };
-    fetchProfile();
-  }, [token, logout]);
+
   return (
     <>
       {loading && (
@@ -242,13 +193,13 @@ const InstituteProfile = () => {
                   <Avatar className="w-24 h-24">
                     {/* <AvatarImage src={profileImage || undefined} alt="Profile" /> */}
                     <AvatarFallback className="text-lg">
-                      {profileData.name.split(' ').map(n => n[0]).join('')}
+                      {profileData.InstituteName.split(' ').map(n => n[0]).join('').toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
 
                 </div>
                 <div className="text-center">
-                  <h3 className="font-semibold text-lg">{profileData.name}</h3>
+                  <h3 className="font-semibold text-lg">{profileData.InstituteName}</h3>
                   <p className="text-gray-500">{profileData.role}</p>
                 </div>
               </div>
@@ -258,29 +209,36 @@ const InstituteProfile = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <User className="w-4 h-4 inline mr-2" />
-                    School Representative Name
+                    <School className="w-4 h-4 inline mr-2" />
+                    School Name
                   </label>
                   {isEditing ? (
                     <Input
-                      value={profileData.name}
-                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      value={profileData.InstituteName}
+                      onChange={(e) => setProfileData({
+                        ...profileData,
+                        InstituteName: e.target.value
+                          .toLowerCase()
+                          .replace(/\b\w/g, (char) => char.toUpperCase()),
+                      })}
+
+                    // disabled
                     />
                   ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.name}</p>
+                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.InstituteName}</p>
                   )}
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Mail className="w-4 h-4 inline mr-2" />
-                    Email Address
+                    School E-mail / ई-मेल
                   </label>
                   {isEditing ? (
                     <Input
                       type="email"
                       value={profileData.email}
-                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                      // onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                      disabled
                     />
                   ) : (
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.email}</p>
@@ -290,7 +248,7 @@ const InstituteProfile = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Phone className="w-4 h-4 inline mr-2" />
-                    Mobile Number
+                    chool Mobile Number / मोबाइल नंबर
                   </label>
                   {isEditing ? (
                     <Input
@@ -302,89 +260,53 @@ const InstituteProfile = () => {
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.mobile}</p>
                   )}
                 </div>
-
-                {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Gender
-                  </label>
-                  {isEditing ? (
-                    <select
-                      value={profileData.gender}
-                      disabled
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-safe-blue focus:outline-none"
-                    >
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.gender}</p>
-                  )}
-                </div> */}
-
-                {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <Calendar className="w-4 h-4 inline mr-2" />
-                    Date of Birth
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      type="date"
-                      value={profileData.dateOfBirth}
-                      onChange={(e) => setProfileData({ ...profileData, dateOfBirth: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.dateOfBirth}</p>
-                  )}
-                </div> */}
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <School className="w-4 h-4 inline mr-2" />
-                    institute Code
+                    Affiliation Code
                   </label>
                   {isEditing ? (
                     <Input
                       value={profileData.instituteCode}
                       onChange={(e) => setProfileData({ ...profileData, instituteCode: e.target.value })}
-                      // disabled
+                    // disabled
 
                     />
                   ) : (
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.instituteCode}</p>
                   )}
                 </div>
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <School className="w-4 h-4 inline mr-2" />
+                    State / राज्य
+                  </label>
+                  {isEditing ? (
+                    <Input
+                      value={profileData?.state}
+                      // onChange={(e) => setProfileData({ ...profileData, instituteCode: e.target.value })}
+                      disabled
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.state}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <School className="w-4 h-4 inline mr-2" />
+                    City / शहर
+                  </label>
+                  {isEditing ? (
+                    <Input
+                      value={profileData.city}
+                      // onChange={(e) => setProfileData({ ...profileData, instituteCode: e.target.value })}
+                      disabled
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <School className="w-4 h-4 inline mr-2" />
-                  School/Institution
-                </label>
-                {isEditing ? (
-                  <Input
-                    value={profileData.InstituteName}
-                    // onChange={(e) => setProfileData({ ...profileData, InstituteName: e.target.value })}
-                    disabled
-                  />
-                ) : (
-                  <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.InstituteName}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-2" />
-                  Address
-                </label>
-                {isEditing ? (
-                  <Input
-                    value={profileData.address}
-                    disabled
-                  // onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
-                  />
-                ) : (
-                  <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.address}</p>
-                )}
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.city}</p>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -394,7 +316,7 @@ const InstituteProfile = () => {
             <CardHeader>
               <CardTitle className="text-xl font-semibold flex items-center">
                 <FileText className="w-5 h-5 mr-2" />
-                School Representative's Document Details
+                Document Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -411,15 +333,6 @@ const InstituteProfile = () => {
                   />
                 ))}
               </div>
-              {/* <div className='content-center'>
-                <Button
-                  // variant="outline"
-                  onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                  className=" bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
-                  <Edit className="w-4 h-4" />
-                  <span>{isEditing ? 'Save Changes' : 'Edit Profile'}</span>
-                </Button>
-              </div> */}
             </CardContent>
           </Card>
           <Card className="mt-6">

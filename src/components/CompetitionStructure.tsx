@@ -208,7 +208,6 @@ const CompetitionStructure = () => {
         </div>
 
         {/* Evaluation Criteria */}
-        {/* <div className='grid lg:grid-cols-4 gap-8 mb-16'></div> */}
         <div className="animate-scale-in">
           <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white rounded-3xl p-8 shadow-2xl">
             <h3 className="text-2xl font-bold mb-6 font-poppins text-center">Evaluation Criteria</h3>

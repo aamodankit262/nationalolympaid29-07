@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useState } from 'react';
 import RoleSelectionDialog from '@/components/RoleSelectionDialog';
 import { useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 
 const Registration = () => {
   const [showRoleDialog, setShowRoleDialog] = useState(false);
@@ -19,15 +18,10 @@ const Registration = () => {
     "Access to financial literacy resources"
   ];
 
-  // const handleRegisterClick = () => {
-  //   setShowRoleDialog(true);
-  // };
-
+  
   const handleRoleSelect = (role: string) => {
-    // console.log('Role selected:', role);
     setShowRoleDialog(false);
 
-    // Navigate to different registration forms based on role
     console.log('Navigating to register for role:', role);
     if (role === 'student') {
       navigate('/student-registration');
@@ -40,25 +34,6 @@ const Registration = () => {
 
   return (
     <section id="register" className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      {/* <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 right-10 w-48 h-48 bg-gradient-to-r from-indigo-400/20 to-purple-400/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-gradient-to-r from-teal-400/15 to-cyan-400/15 rounded-full blur-xl animate-float"></div> */}
-
-      {/* Floating Financial Icons */}
-      {/* <div className="absolute top-20 left-20 animate-float opacity-30">
-        <BookOpen className="w-8 h-8 text-cyan-300" style={{ animationDelay: '0.5s' }} />
-      </div>
-      <div className="absolute top-32 right-32 animate-float opacity-30">
-        <DollarSign className="w-6 h-6 text-green-300" style={{ animationDelay: '1.5s' }} />
-      </div>
-      <div className="absolute bottom-40 left-32 animate-float opacity-30">
-        <Target className="w-7 h-7 text-blue-300" style={{ animationDelay: '2s' }} />
-      </div>
-      <div className="absolute bottom-20 right-20 animate-float opacity-30">
-        <Trophy className="w-6 h-6 text-yellow-300" style={{ animationDelay: '2.5s' }} />
-      </div> */}
-
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl lg:text-5xl font-bold font-poppins mb-6 text-white">

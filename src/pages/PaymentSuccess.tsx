@@ -44,14 +44,8 @@ const getProfile = async () => {
     try {
       const res = await getProfileApi(token, logout);
       const { status, user } = res
-      // console.log(user, 'user')
       if (status) {
         setUserDetails(user)
-        // if (user.isPayment === 1) {
-        //   navigate("/dashboard", { replace: true });
-        // } else {
-        //   navigate("/plans", { replace: true });
-        // }
       }
     } catch (error) {
       console.log(error)
@@ -63,7 +57,6 @@ const getProfile = async () => {
     setLoading(true)
     try {
       const res = await postApi(APIPATH.orderDetails, {}, token, logout);
-      // console.log(res, 'order')
       const { message, order, success } = res
       if (success) {
         setOrderDetails(order);
@@ -126,37 +119,6 @@ const getProfile = async () => {
                 </div>
               </CardContent>
             </Card>
-
-            {/* Next Steps */}
-            {/* <Card className="mb-8 animate-fade-in">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">What's Next?</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Download className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Download Materials</h3>
-                  <p className="text-sm text-gray-600">Access your e-study materials and resources</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <BookOpen className="w-8 h-8 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Start Learning</h3>
-                  <p className="text-sm text-gray-600">Begin your financial literacy journey</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Exam Date</h3>
-                  <p className="text-sm text-gray-600">Mark your calendar for the exam</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
-
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
               <Button
@@ -167,29 +129,8 @@ const getProfile = async () => {
                 <Trophy className="w-5 h-5 mr-2" />
                 Go to Dashboard
               </Button>
-              {/* <Button
-              variant="outline"
-              size="lg"
-              onClick={() => window.print()}
-              className="border-2 border-gray-300 px-8 py-3 rounded-full font-semibold"
-            >
-              <Download className="w-5 h-5 mr-2" />
-              Download Receipt
-            </Button> */}
+              
             </div>
-
-            {/* Support Info */}
-            {/* <div className="mt-12 p-6 bg-white/50 rounded-xl border animate-fade-in">
-            <h3 className="font-semibold text-gray-800 mb-2">Need Help?</h3>
-            <p className="text-sm text-gray-600 mb-3">
-              If you have any questions about your registration or the exam, we're here to help.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 text-sm text-gray-600">
-              <span>📧 support@financialliteracyolympiad.com</span>
-              <span className="hidden sm:inline">|</span>
-              <span>📞 +91-XXXX-XXXX-XX</span>
-            </div>
-          </div> */}
           </div>
         </div>
       </div>

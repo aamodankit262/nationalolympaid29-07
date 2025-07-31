@@ -44,23 +44,6 @@ const Awards = () => {
 
   return (
     <section id="awards" className="py-16 sm:py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-      {/* Static Prize and Finance Icons */}
-      {/* <div className="absolute top-16 left-20 opacity-30">
-        <Trophy className="w-8 h-8 text-yellow-500" />
-      </div>
-      <div className="absolute top-24 right-24 opacity-30">
-        <DollarSign className="w-6 h-6 text-green-500" />
-      </div>
-      <div className="absolute bottom-24 left-16 opacity-30">
-        <BookOpen className="w-7 h-7 text-blue-500" />
-      </div>
-      <div className="absolute bottom-32 right-20 opacity-30">
-        <Target className="w-6 h-6 text-indigo-500" />
-      </div>
-      <div className="absolute top-40 left-1/2 opacity-30">
-        <Gift className="w-5 h-5 text-purple-500" />
-      </div> */}
-      
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-poppins mb-4 sm:mb-6">
@@ -70,10 +53,6 @@ const Awards = () => {
             Win amazing prizes worth over ₹21 Lakhs! Each category has attractive rewards for top performers, 
             plus special recognition for district, state & all india toppers.
           </p>
-          {/* <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-            Win amazing prizes worth over ₹21 Lakhs! Each category has attractive rewards for top performers, 
-            plus special recognition for city and state toppers.
-          </p> */}
         </div>
 
         {/* Prize Structure */}
@@ -144,7 +123,6 @@ const Awards = () => {
               <Sparkles className="w-12 h-12 text-yellow-300" />
             </div>
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 font-poppins">Prizes more than Rs 21 Lakhs </h3>
-            {/* <h3 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-3 sm:mb-4 font-poppins">₹21+ Lakhs</h3> */}
             <p className="text-xl sm:text-2xl mb-6 sm:mb-8">Total Prize Pool</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
               <div className="text-center bg-white/10 p-4 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">

@@ -12,7 +12,6 @@ const TermsSchoolsResource = lazy(() => import("@/pages/TermsSchoolsResource"));
 const TermsStudents = lazy(() => import("@/pages/TermsStudents"));
 const SchoolDashboard = lazy(() => import("@/pages/SchoolDashboard"));
 const ResourcePersonDashboard = lazy(() => import("@/pages/ResourcePersonDashboard"));
-const Referral = lazy(() => import("@/pages/Referral"));
 const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
 const PaymentGateway = lazy(() => import("@/pages/PaymentGateway"));
 // const Exam = lazy(() => import("@/pages/Exam"));
@@ -33,16 +32,15 @@ export interface RouteConfig {
   isProtected?: boolean;
   requiredRoles?: string[];
   requirePayment?: boolean;
-  isRestricted?: boolean; // For public routes that should redirect authenticated users
+  isRestricted?: boolean; 
 }
 
-// Public routes - accessible without authentication
 export const publicRoutes: RouteConfig[] = [
   { 
     path: `/`, 
     element: Index, 
     isProtected: false, 
-    isRestricted: false // Home page can be accessed by everyone
+    isRestricted: false 
   },
   { 
     path: `/home`, 
@@ -54,7 +52,7 @@ export const publicRoutes: RouteConfig[] = [
     path: `/login`, 
     element: Login, 
     isProtected: false, 
-    isRestricted: true // Redirect authenticated users
+    isRestricted: true 
   },
   { 
     path: `/role-selection`, 
@@ -133,38 +131,6 @@ export const privateRoutes: RouteConfig[] = [
     isProtected: true, 
     requiredRoles: ['resource'] 
   },
-  // { 
-  //   path: `/profile`, 
-  //   element: Profile, 
-  //   isProtected: true 
-  // },
-  // { 
-  //   path: `/referral`, 
-  //   element: Referral, 
-  //   isProtected: true, 
-  //   requiredRoles: ['resource'] 
-  // },
-  // { 
-  //   path: `/dashboard/exam-live`, 
-  //   element: Exam, 
-  //   isProtected: true, 
-  //   requiredRoles: ['student'], 
-  //   // requirePayment: true 
-  // },
-  // { 
-  //   path: `/dashboard/exam-instructions`, 
-  //   element: ExamInstruction, 
-  //   isProtected: true, 
-  //   requiredRoles: ['student'], 
-  //   // requirePayment: false 
-  // },
-  // { 
-  //   path: `/exam-thank-you`, 
-  //   element: ExamThankYou, 
-  //   isProtected: true, 
-  //   requiredRoles: ['student'], 
-  //   // requirePayment: false 
-  // },
   { 
     path: `/plans`, 
     element: PaymentGateway, 

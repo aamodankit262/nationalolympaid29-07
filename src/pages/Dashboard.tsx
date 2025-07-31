@@ -13,12 +13,8 @@ import {
   Trophy,
   Clock,
   TrendingUp,
-  User,
   LogOut,
-  Play,
-  Eye,
   FileText,
-  Award,
   Calendar1Icon,
 } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -33,11 +29,9 @@ import { toast } from "@/hooks/use-toast";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Footer from "@/components/Footer";
 import { getProfileApi } from "@/store/auth/authServices";
-// import { time } from "console";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  // const location = useLocation();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -54,18 +48,6 @@ const Dashboard = () => {
     timeSpent: 0,
   });
   const today = new Date().toISOString().split("T")[0];
-  // useEffect(() => {
-  //   if (!userDetails) return null;
-
-  //   if (userDetails.isPayment === 1) {
-  //     navigate("/dashboard", { replace: true });
-
-  //   } else {
-  //     navigate("/plans", { replace: true });
-
-  //   }
-  // }, [userDetails, navigate]);
-
   useEffect(() => {
     getProfile();
   }, []);
@@ -110,7 +92,6 @@ const Dashboard = () => {
         token,
         logout
       );
-      // console.log(res, "dashboard");
       if (res?.success && res.data) {
         setDeshData(res);
         setSelectedDate(res.studentExamDate);
@@ -128,47 +109,15 @@ const Dashboard = () => {
         setStudyMaterials([]);
         setExams([]);
         setStats({ examTaken: 0, averageScore: 0, bestScore: 0, timeSpent: 0 });
-        // Open modal if no date is selected
-        // setTimeout(() => {
-        //   setOpen(true);
-        // }, 1000);
       }
     } catch (error) {
       setStudyMaterials([]);
       setExams([]);
       console.log(error, "catcherror");
-      // setStats({ examTaken: 0, averageScore: 0, bestScore: 0, timeSpent: 0 });
-      // Open modal if no date is selected
-      // setTimeout(() => {
-      //   setOpen(true);
-      // }, 1000);
     } finally {
       setLoading(false);
     }
   };
-  // Add this helper function inside your component
-  // const isExamLocked = (exam: any) => {
-  //   const now = new Date();
-  //   const start = new Date(exam.start_time.replace(/-/g, '/'));
-  //   const end = new Date(exam.end_time.replace(/-/g, '/'));
-  //   return now < start || now > end;
-  // };
-  // const getExamList = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await postApi(APIPATH.examList, { category_id: userDetails?.category_id }, token, logout);
-  //     console.log(res, 'exam');
-  //     if (res?.success && Array.isArray(res.data)) {
-  //       setExams(res.data);
-  //     } else {
-  //       setExams([]);
-  //     }
-  //   } catch (error) {
-  //     setExams([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const statsConfig = [
     {
       title: "Exams Taken",
@@ -203,44 +152,17 @@ const Dashboard = () => {
       bgColor: "bg-purple-50",
     },
   ];
-  // const availableExams = [
-  //   { id: 4, title: "Advanced Financial Planning", duration: "90 min", questions: 50, difficulty: "Hard", status: "locked" }
-  // ];
-
-  // const examHistory = [
-  //   { title: "Financial Literacy - Basic", score: "92%", date: "2024-06-20", duration: "42 min", rank: "3rd", status: "completed" },
-  //   { title: "Investment Basics", score: "88%", date: "2024-06-18", duration: "28 min", rank: "5th", status: "completed" },
-  //   { title: "Banking Fundamentals", score: "96%", date: "2024-06-15", duration: "35 min", rank: "1st", status: "completed" },
-  //   { title: "Money Management", score: "84%", date: "2024-06-12", duration: "40 min", rank: "7th", status: "completed" }
-  // ];
-
-  // const studyMaterials = [
-  //   { title: "Financial Literacy Handbook", type: "PDF", pages: 45, downloadCount: 1250, category: "Basic" },
-
-  // ];
-
-  // const achievements = [
-  //   { title: "First Exam Completed", description: "Successfully completed your first exam", date: "2024-06-01", icon: "🎉" },
-  //   { title: "High Scorer", description: "Scored above 90% in an exam", date: "2024-06-15", icon: "🏆" },
-  //   { title: "Consistent Performer", description: "Maintained 80%+ average for 5 exams", date: "2024-06-18", icon: "⭐" },
-  //   { title: "Speed Champion", description: "Completed exam 20% faster than average", date: "2024-06-20", icon: "⚡" }
-  // ];
-  // useEffect(() => {
-  //   if (!selectedDate)
-  //     setOpen(true)
-  // })
+ 
   const onDateSelect = async (fullDateTime: string) => {
-    // console.log(fullDateTime, "fullDateTime");
     try {
       const [datePart, ...timeParts] = fullDateTime.split(" ");
       const timePart = timeParts.join(" ");
       const [day, month, year] = datePart.split("-");
       const formattedDate = `${year}-${month}-${day}`;
-      // console.log(timePart, "timePart");
       const payload = {
         exam_name: "National Finance Literacy Olympiad",
-        exam_date: datePart, // DD-MM-YYYY
-        exam_time: timePart, // HH:mmAM/PM
+        exam_date: datePart, 
+        exam_time: timePart,
       };
 
       const resp = await postApi(
@@ -249,14 +171,13 @@ const Dashboard = () => {
         token,
         logout
       );
-      // console.log(resp, payload, "setExamDate");
       if (resp.success) {
         toast({
           title: "Date Confirmed",
           description: `You have selected ${fullDateTime}`,
         });
 
-        setSelectedDate(formattedDate); // YYYY-MM-DD
+        setSelectedDate(formattedDate); 
         setOpen(false);
         await getDeshboard();
       } else {
@@ -278,7 +199,6 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <LoaderWithBackground visible={loading} /> */}
       <Dialog open={open} onOpenChange={setOpen}>
         {/* <DialogContent className="fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-gray1 p-[25px] shadow-[var(--shadow-6)] focus:outline-none data-[state=open]:animate-contentShow"> */}
         <DialogContent className="w-full max-w-[95vw] lg:max-w-2xl max-h-[90vh] overflow-y-auto p-0">
@@ -287,15 +207,6 @@ const Dashboard = () => {
             description="Dates are available between 5th Sept–15th Oct"
             onDateSelect={onDateSelect}
           />
-          {/* <DialogClose>
-            <Button
-              variant="outline"
-              className="mt-4 w-full"
-              onClick={() => setOpen(false)}
-            >
-              Close
-            </Button>
-          </DialogClose> */}
         </DialogContent>
       </Dialog>
 
@@ -326,14 +237,6 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="lg:flex items-center space-x-4">
-              {/* <Button variant="ghost" size="sm">
-              <User className="h-4 w-4" />
-            </Button> */}
-              {/* <Button className="bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"> */}
-              {/* <Link
-                to="/plans/payment-success"
-                className="flex items-center space-x-2"
-              > */}
               <Button variant="outline" size="lg">
                 User Id : {userDetails?.user_code || "N/A"}
               </Button>
@@ -431,44 +334,10 @@ const Dashboard = () => {
                   );
                 })}
               </div>
-
-              {/* Quick Actions */}
-              {/* <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Continue your financial literacy journey</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-4">
-                  <Button className="bg-safe-blue hover:bg-safe-blue/90" onClick={() => setActiveTab('exams')}>
-                    <Play className="w-4 h-4 mr-2" />
-                    Take New Exam
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab('results')}>
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Results
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab('study')}>
-                    <FileText className="w-4 h-4 mr-2" />
-                    Study Materials
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab('achievements')}>
-                    <Award className="w-4 h-4 mr-2" />
-                    My Achievements
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab('achievements')}>
-                    <Award className="w-4 h-4 mr-2" />
-                    My Achievements
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-
               {/* Recent Performance */}
               <Card>
                 <CardHeader>
                   <CardTitle>Study Materials</CardTitle>
-                  {/* <CardDescription>Your latest exam results and progress</CardDescription> */}
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full overflow-x-auto">
@@ -508,88 +377,14 @@ const Dashboard = () => {
                                 <FileText className="w-4 h-4 mr-2" />
                                 Download PDF
                               </a>
-                              {/* <a
-                                href={`/api/download/${material.file_name}`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  fetch(`/api/download/${material.file_name}`, {
-                                    headers: {
-                                      Authorization: `Bearer ${token}`,
-                                    },
-                                  }).then((res) => res.blob())
-                                    .then((blob) => {
-                                      const link = document.createElement('a');
-                                      link.href = window.URL.createObjectURL(blob);
-                                      link.download = material.file_name;
-                                      link.click();
-                                    });
-                                }}
-                              >
-                                Download PDF
-                              </a> */}
+                           
                             </Button>
                           </Button>
                         </CardContent>
                       </Card>
                     ))}
-                    {/* <Card>
-                      <CardHeader>
-                        <CardTitle>Admit Card</CardTitle>
-                        <CardDescription>
-                          Download your admit card for the exam.
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm text-gray-600 mb-2">
-                              Your admit card is required for exam entry.
-                            </p>
-                          </div>
-                          <Button
-                            variant="outline"
-                            className="opacity-50 pointer-events-none w-auto"
-                            asChild
-                          >
-                            <a
-                              href={deshData?.studentAdminCard || "#"}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              download
-                            >
-                              <FileText className="w-4 h-4 mr-2" />
-                              Download Admit Card
-                            </a>
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card> */}
-
                   </div>
                 </CardContent>
-                {/* <CardContent>
-                <div className="space-y-4">
-                  {examHistory.slice(0, 3).map((exam, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
-                          <BookOpen className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{exam.title}</p>
-                          <p className="text-sm text-gray-500">{exam.date} • {exam.duration}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-lg font-semibold text-green-600">{exam.score}</p>
-                        <Badge variant="outline" className="text-blue-600">
-                          Rank: {exam.rank}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent> */}
               </Card>
 
               {/* Rules and Regulations */}
@@ -654,13 +449,12 @@ const Dashboard = () => {
                       </div>
                     )}
                     {exams?.map((exam) => {
-                      const examDate = exam.start_time.split(" ")[0]; // YYYY-MM-DD
+                      const examDate = exam.start_time.split(" ")[0]; 
                       const isLocked = today < examDate;
 
                       return (
                         <Card
                           key={exam.id}
-                        // className={isLocked ? "opacity-50 pointer-events-none" : "hover:shadow-lg transition-shadow"}
                         >
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
@@ -676,24 +470,7 @@ const Dashboard = () => {
                               <p className="text-sm text-gray-600">
                                 Questions: {exam.no_of_questions}
                               </p>
-                              {/* <p className="text-sm text-gray-600">
-                                🗓️ {examDate}
-                              </p> */}
                             </div>
-
-                            {/* <Button
-                              className="animate-scale-in w-full bg-safe-blue hover:bg-safe-blue/90 text-white"
-                              onClick={() => {
-                                const examId = exam?.id; // or dynamically set
-                                localStorage.setItem("exam_id", examId);
-                                navigate("/dashboard/exam-instructions");
-                              }}
-                            // disabled={!!selectedDate}
-                            >
-                              <Calendar1Icon className="mr-2" />
-                              Start Exam
-                            </Button> */}
-
                             <Button
                               className="animate-scale-in w-full bg-safe-blue hover:bg-safe-blue/90 text-white"
                               onClick={() => {
@@ -701,21 +478,13 @@ const Dashboard = () => {
                                   setOpen(true);
                                 }
                               }}
-                              // disabled={!!selectedDate}
-                              disabled={exam.no_of_questions === 0 || !!selectedDate}
+                              disabled={exam?.no_of_questions === 0 || !!selectedDate}
                             >
                               <Calendar1Icon className="mr-2" />
                               {selectedDate && selectedTime
                                 ? `Start Exam on ${selectedDate} at ${selectedTime}`
                                 : "Choose Exam Date"}
                             </Button>
-
-                            {/* Optional: Show Start Exam button if unlocked and date selected */}
-                            {/* {!isLocked && selectedDate && (
-          <Button className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white">
-            Start Exam
-          </Button>
-        )} */}
                           </CardContent>
                         </Card>
                       );
@@ -764,91 +533,6 @@ const Dashboard = () => {
               </div>
             </>
           )}
-
-          {/* Results Tab */}
-          {/* {activeTab === "results" && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Exam History</CardTitle>
-                <CardDescription>
-                  Your complete exam performance record
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {examHistory.map((exam, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 border rounded-lg"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-safe-blue rounded-full flex items-center justify-center text-white font-semibold">
-                          <BookOpen className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{exam.title}</p>
-                          <p className="text-sm text-gray-500">
-                            {exam.date} • {exam.duration}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-lg font-semibold text-green-600">
-                          {exam.score}
-                        </p>
-                        <Badge variant="outline" className="text-blue-600">
-                          Rank: {exam.rank}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )} */}
-
-          {/* Study Materials Tab */}
-          {/* {activeTab === "study" && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Study Materials</CardTitle>
-                <CardDescription>
-                  Download and access study resources for exam preparation
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full overflow-x-auto">
-                  {studyMaterials.map((material, index) => (
-                    <Card
-                      key={index}
-                      className="hover:shadow-lg transition-shadow"
-                    >
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <h3 className="font-semibold">{material.title}</h3>
-                          <Badge variant="outline">{deshData?.planTitle}</Badge>
-                        </div>
-                        <div className="space-y-2 mb-4">
-                          <p className="text-sm text-gray-600">
-                            📄 {material.original_name} • {material.total_pages}{" "}
-                            pages
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            ⬇️ {material.no_of_downloads} downloads
-                          </p>
-                        </div>
-                        <Button variant="outline" className="w-full">
-                          <FileText className="w-4 h-4 mr-2" />
-                          Download PDF
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )} */}
-
           {/* Achievements Tab */}
           {activeTab === "achievements" && (
             <Card>
@@ -860,17 +544,6 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* {achievements.map((achievement, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                      <div className="text-2xl">{achievement.icon}</div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{achievement.title}</h3>
-                        <p className="text-sm text-gray-600">{achievement.description}</p>
-                        <p className="text-xs text-gray-400">Earned on {achievement.date}</p>
-                      </div>
-                      <Badge variant="secondary">Earned</Badge>
-                    </div>
-                  ))} */}
                   <Card>
                     <CardHeader>
                       <CardTitle>Certificate</CardTitle>

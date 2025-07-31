@@ -47,17 +47,6 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 animate-fade-in pb-0">
       {/* Top Contact Bar */}
       <div className="bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 text-white py-2 px-2 md:px-4 animate-gradient relative overflow-hidden">
-        {/* Floating Icons */}
-        {/* <div className="absolute top-1 left-10 md:left-20 animate-float opacity-30">
-          <BookOpen className="w-3 h-3 text-blue-300" style={{ animationDelay: '0.5s' }} />
-        </div>
-        <div className="absolute top-1 right-10 md:right-32 animate-float opacity-30">
-          <DollarSign className="w-3 h-3 text-green-300" style={{ animationDelay: '1.5s' }} />
-        </div>
-        <div className="absolute top-1 left-1/2 animate-float opacity-30">
-          <Target className="w-3 h-3 text-yellow-300" style={{ animationDelay: '2s' }} />
-        </div> */}
-
         <div className="container mx-auto flex flex-wrap flex-col md:flex-row justify-between items-center text-xs md:text-sm relative z-10 gap-y-1 md:gap-y-0">
           <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-4">
             <div className="flex items-center space-x-1 hover:scale-105 transition-transform duration-300">
@@ -93,10 +82,6 @@ const Header = () => {
                 <h1 className="font-bold bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 bg-clip-text text-transparent text-base md:text-lg leading-tight">
                   SAFE Academy
                 </h1>
-              
-                {/* <p className="text-xs text-gray-600">
-                  Sodhani Academy of Fintech <br /> Enablers Limited
-                </p> */}
               </div>
             </div>
             {/* SK Finance Block */}
@@ -141,10 +126,7 @@ const Header = () => {
                       navigate('/dashboard');
                     }
                   }}
-                  // disabled={
-                  //   userDetails?.type === 'student' &&
-                  //   (userDetails?.isPayment!== 1)
-                  // }
+                
                   className="bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 hover:opacity-90 text-white px-4 md:px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg text-sm xl:text-base"
                 >
                   Dashboard
@@ -201,10 +183,7 @@ const Header = () => {
                         navigate('/dashboard');
                       }
                     }}
-                    // disabled={
-                    //   userDetails?.type === 'student' &&
-                    //   (userDetails?.isPayment!== 1)
-                    // }
+                   
                     className={`bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 hover:opacity-90 text-white px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg w-full text-base mt-2`}
                   >
                     Dashboard

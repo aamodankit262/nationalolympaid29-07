@@ -16,20 +16,6 @@ const ImportantDates = () => {
 
   return (
     <section id="dates" className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-      {/* Floating Financial Elements */}
-      {/* <div className="absolute top-20 right-16 animate-float opacity-30">
-        <BookOpen className="w-8 h-8 text-blue-500" style={{ animationDelay: '0.5s' }} />
-      </div>
-      <div className="absolute top-32 left-20 animate-float opacity-30">
-        <Trophy className="w-6 h-6 text-yellow-500" style={{ animationDelay: '1s' }} />
-      </div>
-      <div className="absolute bottom-32 right-24 animate-float opacity-30">
-        <DollarSign className="w-7 h-7 text-green-500" style={{ animationDelay: '1.5s' }} />
-      </div>
-      <div className="absolute bottom-20 left-16 animate-float opacity-30">
-        <Target className="w-6 h-6 text-indigo-500" style={{ animationDelay: '2s' }} />
-      </div> */}
-
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl lg:text-5xl font-bold font-poppins mb-6">
@@ -56,7 +42,6 @@ const ImportantDates = () => {
                 <div className="text-4xl font-bold mb-2">15th July</div>
                 <p className="text-white/90 mb-6">Registration starts for all categories</p>
                 <Button
-                  // onClick={() => scrollToSection('register')}
                   onClick={() => navigate('/role-selection')}
 
                   className="bg-white text-blue-600 hover:bg-white/90 font-semibold px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg"
@@ -79,11 +64,8 @@ const ImportantDates = () => {
               </div>
               <h3 className="text-2xl font-bold mb-4 text-center font-poppins">Exam Dates</h3>
               <div className="text-center">
-                {/* <div className="text-lg font-semibold mb-2">5th September to</div> */}
-                {/* <div className="text-lg font-bold mb-2 animate-bounce" style={{ animationDelay: '0.5s' }}>20th September</div> */}
                 <div className="text-3xl font-bold mb-2 " style={{ animationDelay: '0.5s' }}>5th September to 15th October</div>
                 <div className="text-lg font-semibold mb-4">2025</div>
-                {/* <p className="text-white/90">Online examination period</p> */}
               </div>
             </CardContent>
           </Card>
@@ -103,9 +85,6 @@ const ImportantDates = () => {
                 <div className="text-4xl font-bold mb-2" style={{ animationDelay: '1s' }}>60</div>
                 <div className="text-xl font-semibold mb-4">Minutes</div>
                 <p className="text-white/90 mb-4">MCQ based online examination</p>
-                {/* <div className="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
-                  <p className="text-sm">Multiple Choice Questions format</p>
-                </div> */}
               </div>
             </CardContent>
           </Card>
@@ -168,7 +147,6 @@ const ImportantDates = () => {
               <h4 className="text-2xl font-bold mb-4 font-poppins">Don't Miss Out!</h4>
               <p className="mb-6">Registration opens on 15th July 2025. Be among the first to secure your spot in India's premier financial literacy competition.</p>
               <Button
-                // onClick={() => scrollToSection('register')}
                 onClick={() => navigate('/role-selection')}
                 size="lg"
                 className="bg-white text-blue-600 hover:bg-white/90 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
