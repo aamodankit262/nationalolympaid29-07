@@ -307,6 +307,22 @@ const InstituteProfile = () => {
                     <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.city}</p>
                   )}
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <School className="w-4 h-4 inline mr-2" />
+                    School PinCode
+                  </label>
+                  {isEditing ? (
+                    <Input
+                      value={profileData.pinCode}
+                      // onChange={(e) => setProfileData({ ...profileData, pinCode: e.target.value })}
+                    disabled
+
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">{profileData.pinCode}</p>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>

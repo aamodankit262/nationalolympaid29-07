@@ -267,12 +267,13 @@ const SchoolRegister = () => {
                     <Input
                       type="text"
                       value={formData.pinCode}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          pinCode: e.target.value,
-                        })
-                      }
+                       onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric
+                          if (value.length <= 6) {
+                            setFormData({ ...formData, pinCode: value });
+                          }
+                        }}
+                     
                       placeholder="Enter School Pincode"
                     />
                   </div>
