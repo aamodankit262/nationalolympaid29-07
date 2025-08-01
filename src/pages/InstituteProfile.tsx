@@ -328,7 +328,7 @@ const InstituteProfile = () => {
           </Card>
 
           {/* Document Details Section (Only for Students) */}
-          <Card className="mt-6">
+          {/* <Card className="mt-6">
             <CardHeader>
               <CardTitle className="text-xl font-semibold flex items-center">
                 <FileText className="w-5 h-5 mr-2" />
@@ -350,7 +350,7 @@ const InstituteProfile = () => {
                 ))}
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
           <Card className="mt-6">
             <CardHeader>
               <CardTitle className="text-xl font-semibold flex items-center">
