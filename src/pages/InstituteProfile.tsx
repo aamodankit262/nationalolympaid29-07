@@ -310,7 +310,7 @@ const InstituteProfile = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <School className="w-4 h-4 inline mr-2" />
-                    School PinCode
+                    School Pincode
                   </label>
                   {isEditing ? (
                     <Input
@@ -324,135 +324,7 @@ const InstituteProfile = () => {
                   )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Document Details Section (Only for Students) */}
-          {/* <Card className="mt-6">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center">
-                <FileText className="w-5 h-5 mr-2" />
-                Document Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {documentFields.map(field => (
-                  <DocumentField
-                    key={field.key}
-                    label={field.label}
-                    value={documentData[field.key]}
-                    isEditing={isEditing}
-                    accept={field.accept}
-                    baseUrl={baseUrl}
-                    onChange={file => setDocumentData({ ...documentData, [field.key]: file })}
-                  />
-                ))}
-              </div>
-            </CardContent>
-          </Card> */}
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center">
-                <CreditCard className="w-5 h-5 mr-2" />
-                Bank Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Account Holder Name
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      value={bankData.accountHolderName}
-                      onChange={(e) => setBankData({ ...bankData, accountHolderName: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {bankData.accountHolderName || 'Not provided'}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Account Number
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      value={bankData.accountNumber}
-                      onChange={(e) => setBankData({ ...bankData, accountNumber: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {bankData.accountNumber ? bankData.accountNumber : 'Not provided'}
-                      {/* {bankData.accountNumber ? '****' + bankData.accountNumber.slice(-4) : 'Not provided'} */}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    IFSC Code
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      value={bankData.ifscCode}
-                      onChange={(e) => setBankData({ ...bankData, ifscCode: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {bankData.ifscCode || 'Not provided'}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bank Name
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      value={bankData.bankName}
-                      onChange={(e) => setBankData({ ...bankData, bankName: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {bankData.bankName || 'Not provided'}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Branch Name
-                  </label>
-                  {isEditing ? (
-                    <Input
-                      value={bankData.branchName}
-                      onChange={(e) => setBankData({ ...bankData, branchName: e.target.value })}
-                    />
-                  ) : (
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-lg">
-                      {bankData.branchName || 'Not provided'}
-                    </p>
-                  )}
-                </div>
-                {bankFields.map(field => (
-                  <DocumentField
-                    key={field.key}
-                    label={field.label}
-                    value={bankData[field.key]}
-                    isEditing={isEditing}
-                    accept={field.accept}
-                    baseUrl={baseUrl}
-                    onChange={file => setBankData({ ...bankData, [field.key]: file })}
-                  />
-                ))}
-              </div>
-              <div className='content-center'>
+               <div className='content-center'>
                 <Button
                   // variant="outline"
                   onClick={() => isEditing ? handleSave() : setIsEditing(true)}
@@ -461,10 +333,9 @@ const InstituteProfile = () => {
                   <span>{isEditing ? 'Save Changes' : 'Edit Profile'}</span>
                 </Button>
               </div>
-
             </CardContent>
-
           </Card>
+          
         </main>
       </div>
     </>
