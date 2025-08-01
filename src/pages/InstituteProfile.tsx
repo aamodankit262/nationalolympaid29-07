@@ -248,7 +248,7 @@ const InstituteProfile = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Phone className="w-4 h-4 inline mr-2" />
-                    chool Mobile Number / मोबाइल नंबर
+                    School Mobile Number / मोबाइल नंबर
                   </label>
                   {isEditing ? (
                     <Input
